@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Dough + crust -->
+    <item>
+        <shape android:shape="oval">
+            <size
+                android:width="96dp"
+                android:height="96dp" />
+            <gradient
+                android:startColor="#FEE07B"
+                android:endColor="#F4C646"
+                android:type="radial"
+                android:gradientRadius="60dp"
+                android:centerX="50%"
+                android:centerY="45%" />
+            <stroke
+                android:width="8dp"
+                android:color="#D1914B" />
+        </shape>
+    </item>
+
+    <!-- Sauce smears -->
+    <item android:left="24dp" android:top="18dp">
+        <shape android:shape="oval">
+            <size android:width="30dp" android:height="18dp" />
+            <solid android:color="#E0562B" />
+        </shape>
+    </item>
+
+    <item android:left="50dp" android:top="50dp">
+        <shape android:shape="oval">
+            <size android:width="22dp" android:height="14dp" />
+            <solid android:color="#E0562B" />
+        </shape>
+    </item>
+
+    <!-- Cheese ribbons -->
+    <item android:left="18dp" android:top="34dp">
+        <shape android:shape="rectangle">
+            <size android:width="46dp" android:height="6dp" />
+            <solid android:color="#FFE890" />
+            <corners android:radius="12dp" />
+        </shape>
+    </item>
+
+    <item android:left="34dp" android:top="54dp">
+        <shape android:shape="rectangle">
+            <size android:width="42dp" android:height="6dp" />
+            <solid android:color="#FFD86B" />
+            <corners android:radius="12dp" />
+        </shape>
+    </item>
+
+    <!-- Pepperoni -->
+    <item android:left="18dp" android:top="16dp">
+        <shape android:shape="oval">
+            <size android:width="18dp" android:height="18dp" />
+            <solid android:color="#D64123" />
+            <stroke android:width="1dp" android:color="#B43018" />
+        </shape>
+    </item>
+
+    <item android:left="60dp" android:top="18dp">
+        <shape android:shape="oval">
+            <size android:width="16dp" android:height="16dp" />
+            <solid android:color="#D64123" />
+            <stroke android:width="1dp" android:color="#B43018" />
+        </shape>
+    </item>
+
+    <item android:left="36dp" android:top="60dp">
+        <shape android:shape="oval">
+            <size android:width="20dp" android:height="20dp" />
+            <solid android:color="#D64123" />
+            <stroke android:width="1dp" android:color="#B43018" />
+        </shape>
+    </item>
+
+    <!-- Olives -->
+    <item android:left="42dp" android:top="32dp">
+        <shape android:shape="oval">
+            <size android:width="10dp" android:height="10dp" />
+            <solid android:color="#151515" />
+        </shape>
+    </item>
+
+    <item android:left="26dp" android:top="56dp">
+        <shape android:shape="oval">
+            <size android:width="8dp" android:height="8dp" />
+            <solid android:color="#151515" />
+        </shape>
+    </item>
+
+    <item android:left="66dp" android:top="42dp">
+        <shape android:shape="oval">
+            <size android:width="7dp" android:height="7dp" />
+            <solid android:color="#151515" />
+        </shape>
+    </item>
+
+</layer-list>
+

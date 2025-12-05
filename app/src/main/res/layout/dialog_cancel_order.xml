@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@color/card_background">
+
+    <!-- Title -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/cancel_order_title"
+        android:textColor="@color/text_primary"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="20dp"/>
+
+    <!-- Radio Group for Cancel Reasons -->
+    <RadioGroup
+        android:id="@+id/rgCancelReasons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Reason 1: Changed my mind -->
+        <RadioButton
+            android:id="@+id/rbChangedMind"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel_reason_changed_mind"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp"
+            android:padding="16dp"
+            android:buttonTint="@color/green_primary"
+            android:background="@drawable/cancel_reason_background"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Reason 2: Found better price -->
+        <RadioButton
+            android:id="@+id/rbBetterPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel_reason_better_price"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp"
+            android:padding="16dp"
+            android:buttonTint="@color/green_primary"
+            android:background="@drawable/cancel_reason_background"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Reason 3: Ordered by mistake -->
+        <RadioButton
+            android:id="@+id/rbOrderedMistake"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel_reason_ordered_mistake"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp"
+            android:padding="16dp"
+            android:buttonTint="@color/green_primary"
+            android:background="@drawable/cancel_reason_background"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Reason 4: Item out of stock -->
+        <RadioButton
+            android:id="@+id/rbOutOfStock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel_reason_out_of_stock"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp"
+            android:padding="16dp"
+            android:buttonTint="@color/green_primary"
+            android:background="@drawable/cancel_reason_background"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Reason 5: Delivery too slow -->
+        <RadioButton
+            android:id="@+id/rbDeliverySlow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel_reason_delivery_slow"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp"
+            android:padding="16dp"
+            android:buttonTint="@color/green_primary"
+            android:background="@drawable/cancel_reason_background"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Reason 6: Other -->
+        <RadioButton
+            android:id="@+id/rbOther"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel_reason_other"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp"
+            android:padding="16dp"
+            android:buttonTint="@color/green_primary"
+            android:background="@drawable/cancel_reason_background"
+            android:layout_marginBottom="8dp"/>
+
+    </RadioGroup>
+
+    <!-- Other Reason Text Input (initially hidden) -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilOtherReason"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/cancel_reason_other_hint"
+        android:visibility="gone"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:boxCornerRadiusTopStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusBottomEnd="12dp"
+        app:hintTextColor="@color/text_hint"
+        app:boxStrokeColor="@color/green_primary"
+        android:layout_marginTop="8dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etCancelReason"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:minLines="3"
+            android:maxLines="5"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_hint"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+</LinearLayout>
+

@@ -1,0 +1,321 @@
+<resources>
+    <!-- App Name -->
+    <string name="app_name">Eat&amp;Run</string>
+    
+    <!-- Common -->
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="add">Add</string>
+    <string name="search">Search</string>
+    <string name="loading">Loading…</string>
+    <string name="error">Error</string>
+    <string name="success">Success</string>
+    <string name="confirm">Confirm</string>
+    <string name="close">Close</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    
+    <!-- Authentication -->
+    <string name="login">Login</string>
+    <string name="signup">Sign Up</string>
+    <string name="logout">Logout</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="full_name">Full Name</string>
+    <string name="phone">Phone Number</string>
+    <string name="address">Address</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="create_account">Create Account</string>
+    <string name="already_have_account">Already have an account?</string>
+    <string name="dont_have_account">Don\'t have an account?</string>
+    <string name="sign_in_here">Sign in here</string>
+    <string name="sign_up_here">Sign up here</string>
+    
+    <!-- Validation Messages -->
+    <string name="error_empty_email">Email cannot be empty</string>
+    <string name="error_invalid_email">Please enter a valid email</string>
+    <string name="error_empty_password">Password cannot be empty</string>
+    <string name="error_password_too_short">Password must be at least 6 characters</string>
+    <string name="error_empty_name">Name cannot be empty</string>
+    <string name="error_empty_phone">Phone number cannot be empty</string>
+    <string name="error_invalid_phone">Please enter a valid phone number</string>
+    <string name="error_empty_address">Address cannot be empty</string>
+    <string name="error_passwords_dont_match">Passwords do not match</string>
+    
+    <!-- Customer Dashboard -->
+    <string name="welcome_back">Welcome back!</string>
+    <string name="what_to_eat_today">What would you like to eat today?</string>
+    <string name="categories">Categories</string>
+    <string name="popular_items">Popular Items</string>
+    <string name="see_all">See All</string>
+    <string name="view_cart">View Cart</string>
+    <string name="add_to_cart">Add to Cart</string>
+    <string name="notifications">Notifications</string>
+    
+    <!-- Menu & Food Items -->
+    <string name="menu">Menu</string>
+    <string name="food_details">Food Details</string>
+    <string name="description">Description</string>
+    <string name="price">Price</string>
+    <string name="preparation_time">Preparation Time: %s mins</string>
+    <string name="available">Available</string>
+    <string name="not_available">Not Available</string>
+    <string name="out_of_stock">Out of Stock</string>
+    
+    <!-- Cart -->
+    <string name="my_cart">My Cart</string>
+    <string name="cart_empty">Your cart is empty</string>
+    <string name="browse_menu">Browse Menu</string>
+    <string name="order_summary">Order Summary</string>
+    <string name="subtotal">Subtotal</string>
+    <string name="delivery_fee">Delivery Fee</string>
+    <string name="total">Total</string>
+    <string name="proceed_to_checkout">Proceed to Checkout</string>
+    <string name="remove_item">Remove Item</string>
+    <string name="quantity">Quantity</string>
+    <string name="item_added_to_cart">Item added to cart</string>
+    <string name="item_removed_from_cart">Item removed from cart</string>
+    
+    <!-- Checkout -->
+    <string name="checkout">Checkout</string>
+    <string name="delivery_address">Delivery Address</string>
+    <string name="select_address">Select Address</string>
+    <string name="enter_delivery_address">Enter delivery address</string>
+    <string name="payment_method">Payment Method</string>
+    <string name="select_payment_method">Select payment method</string>
+    <string name="cash_on_delivery">Cash on Delivery (COD)</string>
+    <string name="gcash">GCash</string>
+    <string name="maya">Maya</string>
+    <string name="order_notes">Order Notes (Optional)</string>
+    <string name="place_order">Place Order</string>
+    <string name="order_placed_successfully">Order placed successfully!</string>
+    
+    <!-- Orders -->
+    <string name="my_orders">My Orders</string>
+    <string name="order_history">Order History</string>
+    <string name="order_details">Order Details</string>
+    <string name="order_id">Order ID</string>
+    <string name="order_date">Order Date</string>
+    <string name="order_status">Order Status</string>
+    <string name="order_total">Order Total</string>
+    <string name="track_order">Track Order</string>
+    <string name="cancel_order">Cancel Order</string>
+    <string name="reorder">Reorder</string>
+    
+    <!-- Order Status -->
+    <string name="status_pending">Pending</string>
+    <string name="status_confirmed">Confirmed</string>
+    <string name="status_preparing">Preparing</string>
+    <string name="status_ready">Ready</string>
+    <string name="status_delivering">Out for Delivery</string>
+    <string name="status_completed">Completed</string>
+    <string name="status_cancelled">Cancelled</string>
+    
+    <!-- Order Tracking -->
+    <string name="order_tracking">Order Tracking</string>
+    <string name="estimated_delivery">Estimated Delivery</string>
+    <string name="delivery_person">Delivery Person</string>
+    <string name="contact_delivery">Contact Delivery</string>
+    
+    <!-- Notifications -->
+    <string name="notification_title">Notifications</string>
+    <string name="no_notifications">No notifications yet</string>
+    <string name="mark_all_read">Mark All as Read</string>
+    <string name="clear_all">Clear All</string>
+    <string name="new_notification">New Notification</string>
+    
+    <!-- Profile -->
+    <string name="profile">Profile</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="change_password">Change Password</string>
+    <string name="my_addresses">My Addresses</string>
+    <string name="add_address">Add Address</string>
+    <string name="settings">Settings</string>
+    <string name="about">About</string>
+    <string name="terms_and_conditions">Terms &amp; Conditions</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="rate_app">Rate App</string>
+    
+    <!-- Admin Dashboard -->
+    <string name="admin_dashboard">Admin Dashboard</string>
+    <string name="today_overview">Today\'s Overview</string>
+    <string name="total_orders">Total Orders</string>
+    <string name="total_revenue">Total Revenue</string>
+    <string name="pending_orders">Pending Orders</string>
+    <string name="completed_orders">Completed Orders</string>
+    <string name="quick_actions">Quick Actions</string>
+    
+    <!-- Admin - Manage Orders -->
+    <string name="manage_orders">Manage Orders</string>
+    <string name="all_orders">All Orders</string>
+    <string name="pending">Pending</string>
+    <string name="completed">Completed</string>
+    <string name="cancelled">Cancelled</string>
+    <string name="update_status">Update Status</string>
+    <string name="view_details">View Details</string>
+    <string name="customer_details">Customer Details</string>
+    <string name="customer_name">Customer Name</string>
+    <string name="customer_phone">Customer Phone</string>
+    <string name="customer_address">Customer Address</string>
+    
+    <!-- Admin - Manage Items -->
+    <string name="manage_items">Manage Items</string>
+    <string name="add_item">Add Item</string>
+    <string name="edit_item">Edit Item</string>
+    <string name="delete_item">Delete Item</string>
+    <string name="item_name">Item Name</string>
+    <string name="item_description">Item Description</string>
+    <string name="item_price">Item Price</string>
+    <string name="item_category">Item Category</string>
+    <string name="item_image">Item Image</string>
+    <string name="upload_image">Upload Image</string>
+    <string name="stock_quantity">Stock Quantity</string>
+    <string name="item_added">Item added successfully</string>
+    <string name="item_updated">Item updated successfully</string>
+    <string name="item_deleted">Item deleted successfully</string>
+    
+    <!-- Admin - Manage Categories -->
+    <string name="manage_categories">Manage Categories</string>
+    <string name="add_category">Add Category</string>
+    <string name="edit_category">Edit Category</string>
+    <string name="delete_category">Delete Category</string>
+    <string name="category_name">Category Name</string>
+    <string name="category_description">Category Description</string>
+    <string name="category_icon">Category Icon</string>
+    <string name="category_added">Category added successfully</string>
+    <string name="category_updated">Category updated successfully</string>
+    <string name="category_deleted">Category deleted successfully</string>
+    
+    <!-- Admin - Manage Users -->
+    <string name="manage_users">Manage Users</string>
+    <string name="all_users">All Users</string>
+    <string name="customers">Customers</string>
+    <string name="admins">Admins</string>
+    <string name="blocked_users">Blocked Users</string>
+    <string name="user_details">User Details</string>
+    <string name="block_user">Block User</string>
+    <string name="unblock_user">Unblock User</string>
+    <string name="user_blocked">User blocked successfully</string>
+    <string name="user_unblocked">User unblocked successfully</string>
+    
+    <!-- Admin - Fake Bookings -->
+    <string name="fake_bookings">Fake Bookings</string>
+    <string name="flagged_users">Flagged Users</string>
+    <string name="cancellation_count">Cancellation Count</string>
+    <string name="view_cancellation_history">View Cancellation History</string>
+    <string name="warning_sent">Warning sent to user</string>
+    <string name="three_cancellations_warning">This user has cancelled 3 or more orders</string>
+    
+    <!-- Payment -->
+    <string name="payment">Payment</string>
+    <string name="payment_successful">Payment successful!</string>
+    <string name="payment_failed">Payment failed. Please try again.</string>
+    <string name="processing_payment">Processing payment…</string>
+    <string name="select_payment">Select Payment Method</string>
+    <string name="cod_description">Pay with cash when your order is delivered</string>
+    <string name="gcash_description">Pay securely with GCash</string>
+    <string name="maya_description">Pay securely with Maya</string>
+    
+    <!-- Error Messages -->
+    <string name="error_network">Network error. Please check your connection.</string>
+    <string name="error_server">Server error. Please try again later.</string>
+    <string name="error_loading_data">Failed to load data</string>
+    <string name="error_placing_order">Failed to place order</string>
+    <string name="error_loading_orders">Failed to load orders</string>
+    <string name="error_loading_items">Failed to load items</string>
+    <string name="error_loading_categories">Failed to load categories</string>
+    <string name="error_updating_status">Failed to update status</string>
+    <string name="error_permission">Permission required</string>
+    
+    <!-- Success Messages -->
+    <string name="profile_updated">Profile updated successfully</string>
+    <string name="password_changed">Password changed successfully</string>
+    <string name="address_added">Address added successfully</string>
+    <string name="order_cancelled">Order cancelled successfully</string>
+    <string name="status_updated">Status updated successfully</string>
+    
+    <!-- Confirmation Messages -->
+    <string name="confirm_logout">Are you sure you want to logout?</string>
+    <string name="confirm_delete_item">Are you sure you want to delete this item?</string>
+    <string name="confirm_delete_category">Are you sure you want to delete this category?</string>
+    <string name="confirm_cancel_order">Are you sure you want to cancel this order?</string>
+    <string name="confirm_block_user">Are you sure you want to block this user?</string>
+    
+    <!-- Map & Location -->
+    <string name="select_location">Select Location</string>
+    <string name="current_location">Current Location</string>
+    <string name="use_current_location">Use Current Location</string>
+    <string name="search_address">Search for address</string>
+    <string name="confirm_location">Confirm Location</string>
+    <string name="location_permission_required">Location permission is required</string>
+    
+    <!-- Time & Date -->
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="minutes_ago">%d minutes ago</string>
+    <string name="hours_ago">%d hours ago</string>
+    <string name="days_ago">%d days ago</string>
+    
+    <!-- Currency -->
+    <string name="currency_symbol">₱</string>
+    <string name="price_format">₱%.2f</string>
+    
+    <!-- Misc -->
+    <string name="no_items_found">No items found</string>
+    <string name="no_orders_found">No orders found</string>
+    <string name="no_results">No results found</string>
+    <string name="try_again">Try Again</string>
+    <string name="refresh">Refresh</string>
+    <string name="filter">Filter</string>
+    <string name="sort">Sort</string>
+    <string name="apply">Apply</string>
+    <string name="reset">Reset</string>
+    <string name="share">Share</string>
+    <string name="rate">Rate</string>
+    <string name="feedback">Feedback</string>
+    
+    <!-- Network Status -->
+    <string name="offline_mode">You are offline</string>
+    <string name="online_mode">Connected</string>
+    <string name="checking_connection">Checking connection…</string>
+    
+    <!-- Content Descriptions (for accessibility) -->
+    <string name="cd_food_image">Food image</string>
+    <string name="cd_category_icon">Category icon</string>
+    <string name="cd_notification_bell">Notification bell</string>
+    <string name="cd_back_button">Back button</string>
+    <string name="cd_cart_button">Shopping cart</string>
+    <string name="cd_profile_picture">Profile picture</string>
+    <string name="cd_increase_quantity">Increase quantity</string>
+    <string name="cd_decrease_quantity">Decrease quantity</string>
+    <string name="cd_remove_item">Remove item</string>
+    
+    <!-- Navigation Drawer -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    
+    <!-- Cancel Order Dialog -->
+    <string name="cancel_order_title">Why are you cancelling this order?</string>
+    <string name="cancel_reason_changed_mind">Changed my mind</string>
+    <string name="cancel_reason_better_price">Found better price elsewhere</string>
+    <string name="cancel_reason_ordered_mistake">Ordered by mistake</string>
+    <string name="cancel_reason_out_of_stock">Item out of stock</string>
+    <string name="cancel_reason_delivery_slow">Delivery too slow</string>
+    <string name="cancel_reason_other">Other</string>
+    <string name="cancel_reason_other_hint">Please specify your reason</string>
+    <string name="cancel_order_select_reason">Please select a cancellation reason</string>
+    <string name="cancel_order_provide_reason">Please provide a cancellation reason</string>
+    <string name="keep_order">Keep Order</string>
+    
+    <!-- Edit Profile Dialog -->
+    <string name="edit_profile_title">Edit Profile</string>
+    <string name="edit_profile_subtitle">Update your personal information</string>
+    <string name="email_cannot_change">Email cannot be changed. Contact support if you need to update it.</string>
+    <string name="save_changes">Save Changes</string>
+    <string name="cd_info_icon">Information icon</string>
+</resources>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Permissions -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
+    <application
+        android:name=".MyApp"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.FoodOrderingSystem"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="31">
+
+        <!-- Main Activity (Home) -->
+        <activity
+            android:name=".activities.common.HomeActivity"
+            android:exported="true"
+            android:theme="@style/Theme.FoodOrderingSystem">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Login Activity -->
+        <activity
+            android:name=".activities.auth.LoginActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FoodOrderingSystem" />
+
+        <!-- Auth Activities -->
+        <activity
+            android:name=".activities.auth.SignUpActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FoodOrderingSystem" />
+        <activity
+            android:name=".activities.auth.VerifyEmailActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FoodOrderingSystem" />
+        <activity
+            android:name=".activities.auth.ForgotPasswordActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FoodOrderingSystem" />
+        <activity
+            android:name=".activities.auth.ResetPasswordActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FoodOrderingSystem" />
+
+        <!-- Customer Activities -->
+        <activity
+            android:name=".activities.customer.CustomerDashboardActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FoodOrderingSystem" />
+        <activity
+            android:name=".activities.customer.CartActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FoodOrderingSystem" />
+        <activity
+            android:name=".activities.customer.CheckoutActivity"
+            android:exported="true"
+            android:theme="@style/Theme.FoodOrderingSystem">
+            <!-- Deep link for PayMongo payment return -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="foodorderingsystem" android:host="payment-return" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.customer.PaymentWebViewActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FoodOrderingSystem" />
+        <activity
+            android:name=".activities.customer.MenuActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FoodOrderingSystem" />
+        <activity
+            android:name=".activities.customer.OrderHistoryActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FoodOrderingSystem" />
+        <activity
+            android:name=".activities.customer.OrderDetailActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FoodOrderingSystem" />
+        <activity
+            android:name=".activities.customer.ProfileActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FoodOrderingSystem" />
+
+        <!-- Admin Activities -->
+        <activity
+            android:name=".activities.admin.AdminDashboardActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FoodOrderingSystem" />
+        <activity
+            android:name=".activities.admin.ManageItemsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FoodOrderingSystem" />
+        <activity
+            android:name=".activities.admin.ManageOrdersActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FoodOrderingSystem" />
+        <activity
+            android:name=".activities.admin.ManageCategoriesActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FoodOrderingSystem" />
+        <activity
+            android:name=".activities.admin.ManageUsersActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FoodOrderingSystem" />
+        <activity
+            android:name=".activities.admin.FakeBookingTrackerActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FoodOrderingSystem" />
+        <activity
+            android:name=".activities.admin.AdminManagementActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FoodOrderingSystem" />
+        <activity
+            android:name=".activities.admin.AdminNotificationsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FoodOrderingSystem.NoActionBar" />
+
+        <!-- Common Activities -->
+        <activity
+            android:name=".activities.common.NotificationActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FoodOrderingSystem.NoActionBar" />
+        <activity
+            android:name=".activities.common.WelcomeActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FoodOrderingSystem" />
+
+        <!-- Google Maps API Key -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${mapsApiKey}" />
+
+    </application>
+
+</manifest>
