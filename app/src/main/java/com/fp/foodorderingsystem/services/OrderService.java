@@ -1011,6 +1011,90 @@ public class OrderService {
     }
     
     /**
+     * Cancel an order using UUID string (preferred method)
+     */
+    public void cancelOrder(String orderIdString, String customerId, String reason, String accessToken, NotificationService notificationService, CancelOrderCallback callback) {
+        if (!NetworkUtil.isNetworkAvailable(context)) {
+            if (callback != null) {
+                callback.onError("No internet connection");
+            }
+            return;
+        }
+        
+        if (orderIdString == null || orderIdString.isEmpty()) {
+            if (callback != null) {
+                callback.onError("Invalid order ID");
+            }
+            return;
+        }
+        
+        new Thread(() -> {
+            try {
+                JsonObject body = new JsonObject();
+                body.addProperty("status", "cancelled");
+                body.addProperty("cancelled_by", "customer");
+                body.addProperty("cancellation_reason", reason);
+                // Note: cancelled_at is handled automatically by Supabase or database triggers
+                
+                // Use UUID string for the query
+                String endpoint = "orders?id=eq." + orderIdString;
+                Log.d(TAG, "Cancelling order - Order ID (UUID): " + orderIdString);
+                Log.d(TAG, "Endpoint: " + endpoint);
+                
+                Request request = supabaseService
+                    .createAuthenticatedRequest(endpoint, accessToken)
+                    .patch(RequestBody.create(
+                        MediaType.parse("application/json"),
+                        body.toString()))
+                    .build();
+                
+                Response response = supabaseService.executeRequest(request);
+                String responseBody = response.body() != null ? response.body().string() : "";
+                
+                Log.d(TAG, "Cancel order response - Code: " + response.code() + ", Body: " + responseBody);
+                
+                if (response.isSuccessful()) {
+                    // Increment cancellation count
+                    incrementCancellationCount(customerId, accessToken);
+                    
+                    // Send notification to customer
+                    // Fetch order to get display ID for notification
+                    fetchOrderAndSendCancellationNotification(orderIdString, customerId, reason, accessToken, notificationService);
+                    
+                    // Fetch order details and notify all admins
+                    notifyAdminsOfCancellation(orderIdString, customerId, reason, accessToken, notificationService);
+                    
+                    if (callback != null) {
+                        callback.onSuccess();
+                    }
+                } else {
+                    String errorMsg = "Failed to cancel order: " + response.code();
+                    try {
+                        if (!responseBody.isEmpty()) {
+                            JsonObject errorJson = gson.fromJson(responseBody, JsonObject.class);
+                            if (errorJson != null && errorJson.has("message")) {
+                                errorMsg = errorJson.get("message").getAsString();
+                            } else if (errorJson != null && errorJson.has("error_description")) {
+                                errorMsg = errorJson.get("error_description").getAsString();
+                            }
+                        }
+                    } catch (Exception e) {
+                        Log.e(TAG, "Failed to parse error response", e);
+                    }
+                    if (callback != null) {
+                        callback.onError(errorMsg);
+                    }
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Cancel order error", e);
+                if (callback != null) {
+                    callback.onError("Error: " + e.getMessage());
+                }
+            }
+        }).start();
+    }
+    
+    /**
      * Notify all admins when a customer cancels an order
      */
     private void notifyAdminsOfCancellation(int orderId, String customerId, String reason, String accessToken, NotificationService notificationService) {
@@ -1060,6 +1144,138 @@ public class OrderService {
                                         "Order #" + finalOrderIdDisplay + " has been cancelled by customer. Reason: " + (finalReason != null ? finalReason : "No reason provided"),
                                         "order",
                                         orderId
+                                    );
+                                }
+                            }
+                            Log.d(TAG, "Notified " + adminUsers.size() + " admin(s) about order cancellation: " + finalOrderIdDisplay);
+                        } else {
+                            Log.d(TAG, "No admin users found to notify about order cancellation");
+                        }
+                    }
+                    
+                    @Override
+                    public void onError(String error) {
+                        Log.e(TAG, "Failed to fetch admin users for cancellation notification: " + error);
+                        // Don't fail the cancellation if we can't notify admins
+                    }
+                });
+            } catch (Exception e) {
+                Log.e(TAG, "Error notifying admins of cancellation", e);
+                // Don't fail the cancellation if notification fails
+            }
+        }).start();
+    }
+    
+    /**
+     * Fetch order and send cancellation notification to customer
+     */
+    private void fetchOrderAndSendCancellationNotification(String orderIdString, String customerId, String reason, String accessToken, NotificationService notificationService) {
+        new Thread(() -> {
+            try {
+                // Strip any existing quotes from UUID
+                String cleanOrderId = orderIdString.replace("\"", "").trim();
+                
+                // Fetch order by UUID string
+                String url = "orders?id=eq." + cleanOrderId;
+                Request request = supabaseService
+                    .createRequest(url)
+                    .get()
+                    .build();
+                
+                Response response = supabaseService.executeRequest(request);
+                
+                // If 400 error, retry with quotes
+                if (response.code() == 400) {
+                    url = "orders?id=eq.\"" + cleanOrderId + "\"";
+                    request = supabaseService.createRequest(url).get().build();
+                    response = supabaseService.executeRequest(request);
+                }
+                
+                if (response.isSuccessful() && response.body() != null) {
+                    String responseBody = response.body().string();
+                    com.google.gson.JsonArray jsonArray = gson.fromJson(responseBody, com.google.gson.JsonArray.class);
+                    if (jsonArray != null && jsonArray.size() > 0) {
+                        Order order = gson.fromJson(jsonArray.get(0).getAsJsonObject(), Order.class);
+                        if (order != null) {
+                            order.getId(); // Trigger UUID to int conversion
+                            
+                            // Send notification to customer
+                            notificationService.createNotification(
+                                customerId,
+                                "Order Cancelled",
+                                "Your order has been cancelled. Reason: " + (reason != null ? reason : "No reason provided"),
+                                "order",
+                                order.getId()
+                            );
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Error fetching order for cancellation notification", e);
+                // Don't fail the cancellation if notification fails
+            }
+        }).start();
+    }
+    
+    /**
+     * Notify all admins when a customer cancels an order (UUID string version)
+     */
+    private void notifyAdminsOfCancellation(String orderIdString, String customerId, String reason, String accessToken, NotificationService notificationService) {
+        new Thread(() -> {
+            try {
+                // Strip any existing quotes from UUID
+                String cleanOrderId = orderIdString.replace("\"", "").trim();
+                
+                // Fetch the order to get order details
+                String url = "orders?id=eq." + cleanOrderId;
+                Request orderRequest = supabaseService
+                    .createRequest(url)
+                    .get()
+                    .build();
+                
+                Response orderResponse = supabaseService.executeRequest(orderRequest);
+                
+                // If 400 error, retry with quotes
+                if (orderResponse.code() == 400) {
+                    url = "orders?id=eq.\"" + cleanOrderId + "\"";
+                    orderRequest = supabaseService.createRequest(url).get().build();
+                    orderResponse = supabaseService.executeRequest(orderRequest);
+                }
+                
+                String orderIdDisplay = cleanOrderId;
+                int orderIdInt = 0;
+                if (orderResponse.isSuccessful() && orderResponse.body() != null) {
+                    String responseBody = orderResponse.body().string();
+                    com.google.gson.JsonArray jsonArray = gson.fromJson(responseBody, com.google.gson.JsonArray.class);
+                    if (jsonArray != null && jsonArray.size() > 0) {
+                        Order order = gson.fromJson(jsonArray.get(0).getAsJsonObject(), Order.class);
+                        if (order != null) {
+                            orderIdInt = order.getId();
+                            orderIdDisplay = order.getIdString() != null ? order.getIdString() : String.valueOf(order.getId());
+                        }
+                    }
+                }
+                
+                // Make final copy for use in inner class
+                final String finalOrderIdDisplay = orderIdDisplay;
+                final String finalReason = reason;
+                final int finalOrderIdInt = orderIdInt;
+                
+                // Get all admin users
+                UserService userService = new UserService(context);
+                userService.getAdminUsers(accessToken, new UserService.UserListCallback() {
+                    @Override
+                    public void onSuccess(List<User> adminUsers) {
+                        if (adminUsers != null && !adminUsers.isEmpty()) {
+                            // Send notification to each admin
+                            for (User admin : adminUsers) {
+                                if (admin != null && admin.getId() != null) {
+                                    notificationService.createNotification(
+                                        admin.getId(),
+                                        "Order Cancelled by Customer",
+                                        "Order #" + finalOrderIdDisplay + " has been cancelled by customer. Reason: " + (finalReason != null ? finalReason : "No reason provided"),
+                                        "order",
+                                        finalOrderIdInt
                                     );
                                 }
                             }

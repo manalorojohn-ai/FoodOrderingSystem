@@ -421,25 +421,55 @@ public class OrderDetailActivity extends AppCompatActivity {
             return;
         }
         
-        orderService.cancelOrder(orderId, userId, reason, accessToken, notificationService, new OrderService.CancelOrderCallback() {
-            @Override
-            public void onSuccess() {
-                mainHandler.post(() -> {
-                    showLoading(false);
-                    Toast.makeText(OrderDetailActivity.this, "Order cancelled successfully", Toast.LENGTH_SHORT).show();
-                    // Refresh order details
-                    loadOrderDetails(true);
-                });
-            }
-            
-            @Override
-            public void onError(String error) {
-                mainHandler.post(() -> {
-                    showLoading(false);
-                    Toast.makeText(OrderDetailActivity.this, error, Toast.LENGTH_SHORT).show();
-                });
-            }
-        });
+        // Use orderIdString if available (preferred), otherwise fall back to numeric ID
+        String orderIdToCancel = orderIdString;
+        if (TextUtils.isEmpty(orderIdToCancel) && currentOrder.getIdString() != null) {
+            orderIdToCancel = currentOrder.getIdString();
+        }
+        
+        if (TextUtils.isEmpty(orderIdToCancel)) {
+            // Fallback to integer ID method (legacy support)
+            orderService.cancelOrder(orderId, userId, reason, accessToken, notificationService, new OrderService.CancelOrderCallback() {
+                @Override
+                public void onSuccess() {
+                    mainHandler.post(() -> {
+                        showLoading(false);
+                        Toast.makeText(OrderDetailActivity.this, "Order cancelled successfully", Toast.LENGTH_SHORT).show();
+                        // Refresh order details
+                        loadOrderDetails(true);
+                    });
+                }
+                
+                @Override
+                public void onError(String error) {
+                    mainHandler.post(() -> {
+                        showLoading(false);
+                        Toast.makeText(OrderDetailActivity.this, error, Toast.LENGTH_SHORT).show();
+                    });
+                }
+            });
+        } else {
+            // Use UUID string method (preferred)
+            orderService.cancelOrder(orderIdToCancel, userId, reason, accessToken, notificationService, new OrderService.CancelOrderCallback() {
+                @Override
+                public void onSuccess() {
+                    mainHandler.post(() -> {
+                        showLoading(false);
+                        Toast.makeText(OrderDetailActivity.this, "Order cancelled successfully", Toast.LENGTH_SHORT).show();
+                        // Refresh order details
+                        loadOrderDetails(true);
+                    });
+                }
+                
+                @Override
+                public void onError(String error) {
+                    mainHandler.post(() -> {
+                        showLoading(false);
+                        Toast.makeText(OrderDetailActivity.this, error, Toast.LENGTH_SHORT).show();
+                    });
+                }
+            });
+        }
     }
     
     private void markOrderAsReceived() {

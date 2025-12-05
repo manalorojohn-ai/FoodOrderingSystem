@@ -44,6 +44,9 @@ public class ManageUsersActivity extends AppCompatActivity implements SwipeRefre
     private RecyclerView rvUsers;
     private ProgressBar progressBar;
     private TextView tvEmptyState;
+    private TextView tvTotalUsers;
+    private TextView tvAdminsCount;
+    private TextView tvCustomersCount;
 
     private AdminUserAdapter adapter;
     private UserService userService;
@@ -85,6 +88,9 @@ public class ManageUsersActivity extends AppCompatActivity implements SwipeRefre
         rvUsers = findViewById(R.id.rvUsers);
         progressBar = findViewById(R.id.progressBar);
         tvEmptyState = findViewById(R.id.tvEmptyState);
+        tvTotalUsers = findViewById(R.id.tvTotalUsers);
+        tvAdminsCount = findViewById(R.id.tvAdminsCount);
+        tvCustomersCount = findViewById(R.id.tvCustomersCount);
     }
 
     private void setupRecyclerView() {
@@ -163,6 +169,7 @@ public class ManageUsersActivity extends AppCompatActivity implements SwipeRefre
                     }
                     sortUsers();
                     applyFilter(currentQuery);
+                    updateSummaryCards();
                     showLoading(false);
                     swipeRefreshLayout.setRefreshing(false);
                     updateEmptyState();
@@ -403,6 +410,7 @@ public class ManageUsersActivity extends AppCompatActivity implements SwipeRefre
             // User doesn't match filter, but might have matched before, so refresh
             applyFilter(currentQuery);
         }
+        updateSummaryCards();
         updateEmptyState();
     }
 
@@ -417,7 +425,30 @@ public class ManageUsersActivity extends AppCompatActivity implements SwipeRefre
             }
         }
         adapter.removeUser(userId);
+        updateSummaryCards();
         updateEmptyState();
+    }
+    
+    private void updateSummaryCards() {
+        if (tvTotalUsers == null || tvAdminsCount == null || tvCustomersCount == null) {
+            return;
+        }
+        
+        int totalCount = users.size();
+        int adminsCount = 0;
+        int customersCount = 0;
+        
+        for (User user : users) {
+            if (user != null && user.isAdmin()) {
+                adminsCount++;
+            } else {
+                customersCount++;
+            }
+        }
+        
+        tvTotalUsers.setText(String.valueOf(totalCount));
+        tvAdminsCount.setText(String.valueOf(adminsCount));
+        tvCustomersCount.setText(String.valueOf(customersCount));
     }
 
     private void updateEmptyState() {

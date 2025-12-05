@@ -30,8 +30,8 @@ import java.util.Locale;
 import java.util.Set;
 
 public class SignUpActivity extends AppCompatActivity {
-    private TextInputLayout layoutFullName, layoutEmail, layoutPhone, layoutAddress, layoutPassword, layoutConfirmPassword;
-    private TextInputEditText etFullName, etEmail, etPhone, etPassword, etConfirmPassword;
+    private TextInputLayout layoutFirstName, layoutLastName, layoutEmail, layoutPhone, layoutAddress, layoutPassword, layoutConfirmPassword;
+    private TextInputEditText etFirstName, etLastName, etEmail, etPhone, etPassword, etConfirmPassword;
     private MaterialAutoCompleteTextView etAddress;
     private MaterialButton btnSignUp;
     
@@ -41,7 +41,8 @@ public class SignUpActivity extends AppCompatActivity {
     private Set<String> allowedAddresses;
     
     // Validation states
-    private boolean isValidFullName = false;
+    private boolean isValidFirstName = false;
+    private boolean isValidLastName = false;
     private boolean isValidEmail = false;
     private boolean isEmailAvailable = false;
     private boolean isValidPhone = false;
@@ -67,14 +68,16 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        layoutFullName = findViewById(R.id.layoutFullName);
+        layoutFirstName = findViewById(R.id.layoutFirstName);
+        layoutLastName = findViewById(R.id.layoutLastName);
         layoutEmail = findViewById(R.id.layoutEmail);
         layoutPhone = findViewById(R.id.layoutPhone);
         layoutAddress = findViewById(R.id.layoutAddress);
         layoutPassword = findViewById(R.id.layoutPassword);
         layoutConfirmPassword = findViewById(R.id.layoutConfirmPassword);
         
-        etFullName = findViewById(R.id.etFullName);
+        etFirstName = findViewById(R.id.etFirstName);
+        etLastName = findViewById(R.id.etLastName);
         etEmail = findViewById(R.id.etEmail);
         etPhone = findViewById(R.id.etPhone);
         etPassword = findViewById(R.id.etPassword);
@@ -127,14 +130,28 @@ public class SignUpActivity extends AppCompatActivity {
     }
     
     private void setupRealTimeValidation() {
-        // Full Name validation
-        etFullName.addTextChangedListener(new TextWatcher() {
+        // First Name validation
+        etFirstName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                validateFullName();
+                validateFirstName();
+            }
+            
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+        
+        // Last Name validation
+        etLastName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                validateLastName();
             }
             
             @Override
@@ -226,23 +243,45 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
     
-    private void validateFullName() {
-        String name = etFullName.getText() != null ? etFullName.getText().toString() : "";
+    private void validateFirstName() {
+        String name = etFirstName.getText() != null ? etFirstName.getText().toString() : "";
         String sanitized = ValidationUtil.sanitizeInput(name);
         
         if (!sanitized.equals(name)) {
-            etFullName.setText(sanitized);
-            etFullName.setSelection(sanitized.length());
+            etFirstName.setText(sanitized);
+            etFirstName.setSelection(sanitized.length());
         }
         
         String error = ValidationUtil.getFullNameErrorMessage(sanitized);
-        isValidFullName = error == null;
+        isValidFirstName = error == null;
         
         if (error != null) {
-            layoutFullName.setError(error);
+            layoutFirstName.setError(error);
         } else {
-            layoutFullName.setError(null);
-            layoutFullName.setErrorEnabled(false);
+            layoutFirstName.setError(null);
+            layoutFirstName.setErrorEnabled(false);
+        }
+        
+        updateSignUpButtonState();
+    }
+    
+    private void validateLastName() {
+        String name = etLastName.getText() != null ? etLastName.getText().toString() : "";
+        String sanitized = ValidationUtil.sanitizeInput(name);
+        
+        if (!sanitized.equals(name)) {
+            etLastName.setText(sanitized);
+            etLastName.setSelection(sanitized.length());
+        }
+        
+        String error = ValidationUtil.getFullNameErrorMessage(sanitized);
+        isValidLastName = error == null;
+        
+        if (error != null) {
+            layoutLastName.setError(error);
+        } else {
+            layoutLastName.setError(null);
+            layoutLastName.setErrorEnabled(false);
         }
         
         updateSignUpButtonState();
@@ -403,7 +442,8 @@ public class SignUpActivity extends AppCompatActivity {
     }
     
     private void updateSignUpButtonState() {
-        boolean allValid = isValidFullName && 
+        boolean allValid = isValidFirstName && 
+                          isValidLastName &&
                           isValidEmail && 
                           isEmailAvailable && 
                           isValidPhone && 
@@ -418,7 +458,9 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void performSignUp() {
         // Final validation before submission
-        String fullName = ValidationUtil.sanitizeInput(etFullName.getText() != null ? etFullName.getText().toString() : "");
+        String firstName = ValidationUtil.sanitizeInput(etFirstName.getText() != null ? etFirstName.getText().toString() : "");
+        String lastName = ValidationUtil.sanitizeInput(etLastName.getText() != null ? etLastName.getText().toString() : "");
+        String fullName = (firstName + " " + lastName).trim();
         String email = ValidationUtil.sanitizeEmail(etEmail.getText() != null ? etEmail.getText().toString() : "");
         String phone = ValidationUtil.sanitizePhone(etPhone.getText() != null ? etPhone.getText().toString() : "");
         String address = etAddress.getText() != null ? etAddress.getText().toString().trim() : "";
@@ -426,14 +468,15 @@ public class SignUpActivity extends AppCompatActivity {
         String confirmPassword = etConfirmPassword.getText() != null ? etConfirmPassword.getText().toString() : "";
 
         // Re-validate all fields
-        validateFullName();
+        validateFirstName();
+        validateLastName();
         validateEmail();
         validatePhone();
         validateAddress();
         validatePassword();
         validatePasswordMatch();
         
-        if (!isValidFullName || !isValidEmail || !isEmailAvailable || !isValidPhone || 
+        if (!isValidFirstName || !isValidLastName || !isValidEmail || !isEmailAvailable || !isValidPhone || 
             !isValidAddress || !isValidPassword || !isPasswordMatch) {
             Toast.makeText(this, "Please fix all validation errors before submitting", Toast.LENGTH_SHORT).show();
             return;

@@ -16,7 +16,9 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            app:title="Manage Orders"
             app:titleTextColor="@color/text_white"
+            app:navigationIcon="@drawable/ic_back"
             app:navigationIconTint="@color/text_white" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -186,4 +188,3 @@
         android:visibility="gone" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
-

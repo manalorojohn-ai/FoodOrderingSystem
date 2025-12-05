@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <!-- Main Navigation Section -->
+    <group android:checkableBehavior="single" android:title="Navigation">
         <item
             android:id="@+id/nav_dashboard"
             android:icon="@drawable/ic_home"
@@ -9,21 +10,34 @@
         <item
             android:id="@+id/nav_orders"
             android:icon="@drawable/ic_orders"
-            android:title="Manage Orders" />
+            android:title="Orders" />
+    </group>
+
+    <!-- Management Section -->
+    <group android:checkableBehavior="single" android:title="Management">
         <item
             android:id="@+id/nav_items"
-            android:icon="@drawable/ic_menu_nav"
-            android:title="Manage Items" />
+            android:icon="@drawable/ic_food_banner"
+            android:title="Menu Items" />
         <item
             android:id="@+id/nav_categories"
-            android:icon="@drawable/ic_menu_nav"
-            android:title="Manage Categories" />
+            android:icon="@drawable/ic_filter"
+            android:title="Categories" />
         <item
             android:id="@+id/nav_users"
             android:icon="@drawable/ic_user_add"
-            android:title="Manage Users" />
+            android:title="Users" />
     </group>
 
+    <!-- Special Operations Section -->
+    <group android:checkableBehavior="single" android:title="Operations">
+        <item
+            android:id="@+id/nav_bookings"
+            android:icon="@drawable/ic_cart"
+            android:title="Fake Booking" />
+    </group>
+
+    <!-- Account Section -->
     <item android:title="Account">
         <menu>
             <item
@@ -32,10 +46,9 @@
                 android:title="Profile" />
             <item
                 android:id="@+id/nav_logout"
-                android:icon="@android:drawable/ic_lock_power_off"
+                android:icon="@drawable/ic_logout"
                 android:title="Logout" />
         </menu>
     </item>
 
 </menu>
-

@@ -8,8 +8,9 @@ import com.fp.foodorderingsystem.config.SupabaseConfig;
 public class ImageUtil {
     
     // Default bucket names - update these based on your Supabase Storage buckets
+    // IMPORTANT: Bucket names are case-sensitive in Supabase Storage
     public static final String BUCKET_FOOD_ITEMS = "food-items";
-    public static final String BUCKET_CATEGORIES = "categories";
+    public static final String BUCKET_CATEGORIES = "Categories"; // Must match exact case in Supabase
     public static final String BUCKET_LOGO = "logo";
     
     /**
@@ -54,7 +55,9 @@ public class ImageUtil {
         }
         
         // Construct Supabase Storage public URL
-        return SupabaseConfig.SUPABASE_URL + "/storage/v1/object/public/" + bucketName + "/" + filePath;
+        String fullUrl = SupabaseConfig.SUPABASE_URL + "/storage/v1/object/public/" + bucketName + "/" + filePath;
+        android.util.Log.d("ImageUtil", "Generated storage URL - Bucket: " + bucketName + ", Path: " + filePath + ", Full URL: " + fullUrl);
+        return fullUrl;
     }
     
     /**

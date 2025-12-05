@@ -88,8 +88,9 @@ public class ManageOrdersActivity extends AppCompatActivity implements SwipeRefr
         
         rvOrders.setLayoutManager(new LinearLayoutManager(this));
         
+        com.google.android.material.appbar.MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Manage Orders");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }

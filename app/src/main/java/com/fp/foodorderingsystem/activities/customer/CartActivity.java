@@ -94,6 +94,9 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnIte
         btnBrowseMenu = findViewById(R.id.btnBrowseMenu);
         loaderView = findViewById(R.id.loaderView);
 
+        // Setup toolbar back button
+        findViewById(R.id.toolbar).setOnClickListener(v -> onBackPressed());
+
         btnCheckout.setOnClickListener(v -> {
             if (cartItems.isEmpty()) {
                 ToastUtil.show(this, "Your cart is empty");
@@ -109,6 +112,15 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnIte
             startActivity(intent);
             finish();
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(this, CustomerDashboardActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 
     private void setupBottomNavigation() {

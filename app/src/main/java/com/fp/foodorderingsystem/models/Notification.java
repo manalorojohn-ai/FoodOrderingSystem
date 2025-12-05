@@ -1,13 +1,19 @@
 package com.fp.foodorderingsystem.models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Notification {
     private int id;
+    @SerializedName("user_id")
     private String userId;
     private String title;
     private String message;
     private String type; // order, payment, system
+    @SerializedName("order_id")
     private Integer orderId;
+    @SerializedName("is_read")
     private boolean isRead;
+    @SerializedName("created_at")
     private String createdAt;
 
     public Notification() {}

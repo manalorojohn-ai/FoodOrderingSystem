@@ -3,139 +3,282 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="8dp"
-    android:layout_marginBottom="12dp"
+    android:layout_marginHorizontal="12dp"
+    android:layout_marginVertical="8dp"
     app:cardBackgroundColor="#FFFFFF"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="4dp">
+    app:cardCornerRadius="20dp"
+    app:cardElevation="6dp"
+    app:strokeColor="#E9ECEF"
+    app:strokeWidth="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="20dp">
 
+        <!-- Header with User Avatar and Basic Info -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
 
-            <TextView
-                android:id="@+id/tvFullName"
+            <!-- Avatar Background -->
+            <FrameLayout
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/shape_circle_avatar"
+                android:elevation="2dp">
+
+                <TextView
+                    android:id="@+id/tvAvatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="U"
+                    android:textColor="#FFFFFF"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+
+            <!-- User Name and Role Chips -->
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="User Name"
-                android:textColor="#212529"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:orientation="vertical"
+                android:gravity="center_vertical">
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipRole"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkable="false"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-                android:text="Customer"
-                android:textSize="12sp"
-                app:chipBackgroundColor="@color/green_primary_light"
-                app:chipStrokeColor="@color/green_primary"
-                app:chipStrokeWidth="1dp" />
+                <TextView
+                    android:id="@+id/tvFullName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="User Name"
+                    android:textColor="#212529"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="6dp" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipVerified"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:checkable="false"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-                android:text="Verified"
-                android:textSize="12sp"
-                app:chipBackgroundColor="@color/green_primary_light"
-                app:chipStrokeColor="@color/green_primary"
-                app:chipStrokeWidth="1dp" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipRole"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:checkable="false"
+                        android:text="Customer"
+                        android:textSize="11sp"
+                        android:layout_marginEnd="6dp"
+                        app:chipBackgroundColor="@color/green_primary_light"
+                        app:chipStrokeColor="@color/green_primary"
+                        app:chipStrokeWidth="1dp"
+                        app:chipCornerRadius="16dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipVerified"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:checkable="false"
+                        android:text="✓ Verified"
+                        android:textSize="11sp"
+                        app:chipBackgroundColor="@color/green_primary_light"
+                        app:chipStrokeColor="@color/green_primary"
+                        app:chipStrokeWidth="1dp"
+                        app:chipCornerRadius="16dp" />
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvEmail"
+        <!-- Divider -->
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="user@email.com"
-            android:textColor="#495057"
-            android:textSize="14sp" />
+            android:layout_height="1dp"
+            android:background="#E9ECEF"
+            android:layout_marginBottom="16dp" />
 
-        <TextView
-            android:id="@+id/tvPhone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="+63 900 000 0000"
-            android:textColor="#495057"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/tvAddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Address"
-            android:textColor="#6C757D"
-            android:textSize="13sp" />
-
-        <TextView
-            android:id="@+id/tvMeta"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="Joined Jan 01, 2023 • 0 cancellations"
-            android:textColor="#6C757D"
-            android:textSize="12sp" />
-
+        <!-- Contact Information Section -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:gravity="end"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:layout_marginBottom="16dp">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnViewDetails"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
+            <!-- Email with Icon -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📧"
+                    android:textSize="18sp"
+                    android:layout_marginEnd="10dp" />
+
+                <TextView
+                    android:id="@+id/tvEmail"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="user@email.com"
+                    android:textColor="#495057"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <!-- Phone with Icon -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📞"
+                    android:textSize="18sp"
+                    android:layout_marginEnd="10dp" />
+
+                <TextView
+                    android:id="@+id/tvPhone"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="+63 900 000 0000"
+                    android:textColor="#495057"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <!-- Address with Icon -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📍"
+                    android:textSize="18sp"
+                    android:layout_marginEnd="10dp" />
+
+                <TextView
+                    android:id="@+id/tvAddress"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Address"
+                    android:textColor="#6C757D"
+                    android:textSize="13sp"
+                    android:maxLines="2"
+                    android:ellipsize="end" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Meta Information -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="#F8F9FA"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp"
+            app:cornerRadius="12dp">
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="View Details"
-                android:textAllCaps="false"
-                android:textColor="@color/green_primary" />
+                android:text="📅"
+                android:textSize="16sp"
+                android:layout_marginEnd="8dp" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnToggleRole"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/tvMeta"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="Make admin"
-                android:textAllCaps="false" />
+                android:layout_weight="1"
+                android:text="Joined Jan 01, 2023 • 0 cancellations"
+                android:textColor="#6C757D"
+                android:textSize="12sp" />
+        </LinearLayout>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnToggleVerification"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="wrap_content"
+        <!-- Action Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="end">
+
+            <!-- Primary Actions Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="Mark verified"
-                android:textAllCaps="false" />
+                android:orientation="horizontal"
+                android:gravity="end"
+                android:layout_marginBottom="10dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnViewDetails"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="View Details"
+                    android:textAllCaps="false"
+                    android:textSize="13sp"
+                    android:textColor="@color/green_primary" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnToggleVerification"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="Toggle Verify"
+                    android:textAllCaps="false"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- Secondary Actions Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="end">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnToggleRole"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="Toggle Role"
+                    android:textAllCaps="false"
+                    android:textSize="13sp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnResetCancellations"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Reset cancellations"
-                    android:textAllCaps="false" />
+                    android:text="Reset"
+                    android:textAllCaps="false"
+                    android:textSize="13sp" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>
-

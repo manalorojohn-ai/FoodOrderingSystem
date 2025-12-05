@@ -87,6 +87,7 @@ public class AdminUserAdapter extends RecyclerView.Adapter<AdminUserAdapter.View
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
+        private final TextView tvAvatar;
         private final TextView tvFullName;
         private final TextView tvEmail;
         private final TextView tvPhone;
@@ -101,6 +102,7 @@ public class AdminUserAdapter extends RecyclerView.Adapter<AdminUserAdapter.View
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
+            tvAvatar = itemView.findViewById(R.id.tvAvatar);
             tvFullName = itemView.findViewById(R.id.tvFullName);
             tvEmail = itemView.findViewById(R.id.tvEmail);
             tvPhone = itemView.findViewById(R.id.tvPhone);
@@ -117,10 +119,18 @@ public class AdminUserAdapter extends RecyclerView.Adapter<AdminUserAdapter.View
         void bind(User user) {
             Context context = itemView.getContext();
 
-            tvFullName.setText(user.getFullName() != null ? user.getFullName() : "Unnamed user");
+            String fullName = user.getFullName() != null ? user.getFullName() : "Unnamed user";
+            tvFullName.setText(fullName);
             tvEmail.setText(user.getEmail() != null ? user.getEmail() : "No email provided");
             tvPhone.setText(!TextUtils.isEmpty(user.getPhone()) ? user.getPhone() : "No phone");
             tvAddress.setText(!TextUtils.isEmpty(user.getAddress()) ? user.getAddress() : "No address on file");
+            
+            // Set avatar with user initial or profile icon - default to P for Profile
+            String avatarText = "P";
+            if (!TextUtils.isEmpty(fullName) && !fullName.equals("Unnamed user")) {
+                avatarText = String.valueOf(fullName.charAt(0)).toUpperCase();
+            }
+            tvAvatar.setText(avatarText);
 
             String createdAt = user.getCreatedAt() != null ? user.getCreatedAt().replace("T", " ").replace("Z", "") : "Unknown date";
             tvMeta.setText("Joined " + createdAt + " • " + user.getCancellationCount() + " cancellations");

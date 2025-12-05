@@ -33,6 +33,7 @@ import java.util.List;
 
 public class ManageCategoriesActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
+    private com.google.android.material.appbar.MaterialToolbar toolbar;
     private TextInputLayout inputNameLayout;
     private TextInputLayout inputDescriptionLayout;
     private TextInputEditText inputName;
@@ -58,9 +59,12 @@ public class ManageCategoriesActivity extends AppCompatActivity implements Swipe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_categories);
         
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Manage Categories");
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar = findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            }
         }
 
         categoryService = new CategoryService(this);
@@ -399,7 +403,7 @@ public class ManageCategoriesActivity extends AppCompatActivity implements Swipe
 
     @Override
     public boolean onSupportNavigateUp() {
-        onBackPressed();
+        finish();
         return true;
     }
 
@@ -409,5 +413,11 @@ public class ManageCategoriesActivity extends AppCompatActivity implements Swipe
         if (realtimeClient != null) {
             realtimeClient.disconnect();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
     }
 }

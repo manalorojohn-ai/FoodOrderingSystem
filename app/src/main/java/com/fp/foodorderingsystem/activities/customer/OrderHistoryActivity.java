@@ -76,6 +76,15 @@ public class OrderHistoryActivity extends AppCompatActivity {
         emptyStateLayout = findViewById(R.id.layoutEmptyState);
 
         findViewById(R.id.toolbar).setOnClickListener(v -> onBackPressed());
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(this, CustomerDashboardActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
 
         if (swipeRefreshLayout != null) {
             swipeRefreshLayout.setOnRefreshListener(() -> loadOrders(false));

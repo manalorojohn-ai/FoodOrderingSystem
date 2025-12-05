@@ -3,51 +3,52 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="120dp"
+    android:layout_width="140dp"
     android:layout_height="wrap_content"
     android:layout_marginEnd="12dp"
     app:cardCornerRadius="16dp"
-    app:cardElevation="2dp"
+    app:cardElevation="3dp"
     app:cardBackgroundColor="@color/card_background">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp"
         android:gravity="center">
 
-        <!-- Category Icon/Image -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            app:cardCornerRadius="30dp"
-            app:cardElevation="0dp"
-            app:cardBackgroundColor="@color/green_primary_light">
+        <!-- Category Image Container -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_marginBottom="0dp"
+            android:background="@color/green_primary_light">
 
             <ImageView
                 android:id="@+id/ivCategoryIcon"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_gravity="center"
-                android:tint="@color/green_primary"
-                android:contentDescription="Category icon"
-                tools:src="@android:drawable/ic_menu_gallery"/>
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:contentDescription="Category photo"
+                tools:src="@drawable/ic_food_banner"/>
 
-        </com.google.android.material.card.MaterialCardView>
+        </FrameLayout>
 
         <!-- Category Name -->
         <TextView
             android:id="@+id/tvCategoryName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Burgers"
             android:textColor="@color/text_primary"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:layout_marginTop="12dp"
-            android:maxLines="1"
-            android:ellipsize="end"/>
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="10dp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:gravity="center"/>
 
     </LinearLayout>
 

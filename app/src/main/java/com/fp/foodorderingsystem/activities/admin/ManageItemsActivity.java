@@ -94,8 +94,9 @@ public class ManageItemsActivity extends AppCompatActivity implements SwipeRefre
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_items);
         
+        com.google.android.material.appbar.MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Manage Items");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         

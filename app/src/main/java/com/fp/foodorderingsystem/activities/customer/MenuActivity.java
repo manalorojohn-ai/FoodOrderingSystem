@@ -77,6 +77,32 @@ public class MenuActivity extends AppCompatActivity {
     private void initViews() {
         rvCategories = findViewById(R.id.rvCategories);
         rvMenuItems = findViewById(R.id.rvMenuItems);
+        
+        // Setup toolbar back button
+        findViewById(R.id.toolbar).setOnClickListener(v -> onBackPressed());
+        
+        // Setup "See all" button for categories
+        TextView tvSeeAllCategories = findViewById(R.id.tvSeeAllCategories);
+        if (tvSeeAllCategories != null) {
+            tvSeeAllCategories.setOnClickListener(v -> {
+                // Clear category filter to show all items
+                selectedCategoryId = null;
+                // Update category adapter to show no selection
+                if (categoryAdapter != null) {
+                    categoryAdapter.updateList(new ArrayList<>(categories));
+                }
+                filterMenuItems();
+            });
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(this, CustomerDashboardActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 
     private void setupBottomNavigation() {
@@ -147,22 +173,27 @@ public class MenuActivity extends AppCompatActivity {
     private void loadCategories() {
         new Thread(() -> {
             try {
-                Request request = supabaseService.createRequest("categories")
+                Request request = supabaseService.createRequest("categories?select=*&order=name")
                     .get().build();
                 Response response = supabaseService.executeRequest(request);
 
                 if (response.isSuccessful()) {
                     String json = response.body().string();
+                    android.util.Log.d("MenuActivity", "Categories JSON: " + json);
                     Category[] cats = supabaseService.getGson().fromJson(json, Category[].class);
                     categories.clear();
                     if (cats != null) {
                         for (Category cat : cats) {
+                            android.util.Log.d("MenuActivity", "Category: " + cat.getName() + ", imageUrl: " + cat.getImageUrl());
                             categories.add(cat);
                         }
                     }
                     runOnUiThread(() -> categoryAdapter.updateList(new ArrayList<>(categories)));
+                } else {
+                    android.util.Log.e("MenuActivity", "Failed to load categories: " + response.code());
                 }
             } catch (Exception e) {
+                android.util.Log.e("MenuActivity", "Error loading categories", e);
                 e.printStackTrace();
             }
         }).start();

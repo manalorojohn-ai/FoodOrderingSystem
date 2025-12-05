@@ -1,11 +1,16 @@
 package com.fp.foodorderingsystem.models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Category {
     private int id;
     private String name;
     private String description;
+    @SerializedName("image_url")
     private String imageUrl;
+    @SerializedName("is_active")
     private boolean isActive;
+    @SerializedName("created_at")
     private String createdAt;
 
     public Category() {}

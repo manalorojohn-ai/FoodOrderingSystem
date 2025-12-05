@@ -25,6 +25,7 @@ import com.fp.foodorderingsystem.services.SupabaseRealtimeClient;
 import com.fp.foodorderingsystem.services.SupabaseRealtimeClient.RealtimeListener;
 import com.fp.foodorderingsystem.utils.PreferenceUtil;
 import com.fp.foodorderingsystem.utils.ToastUtil;
+import com.fp.foodorderingsystem.utils.ChartStyleUtils;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.gson.JsonObject;
@@ -60,10 +61,12 @@ import java.util.concurrent.Executors;
 public class AdminDashboardActivity extends AppCompatActivity {
     private TextView tvTotalOrders, tvTotalRevenue, tvPendingOrders, tvCompletedOrders;
     private TextView tvNavHeaderName, tvNavHeaderEmail, tvNavHeaderLevel;
+    private TextView tvNotificationBadge;
     private ShapeableImageView imgSidebarAvatar;
     private OrderService orderService;
     private PreferenceUtil preferenceUtil;
     private AuthService authService;
+    private com.fp.foodorderingsystem.services.NotificationService notificationService;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private MaterialToolbar toolbar;
@@ -79,6 +82,10 @@ public class AdminDashboardActivity extends AppCompatActivity {
     private LineChart chartRevenue;
     private PieChart chartOrders;
     private BarChart chartPopularItems;
+    // New insight charts
+    private BarChart chartThroughput;
+    private LineChart chartTraffic;
+    private PieChart chartSatisfaction;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +96,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
         orderService = new OrderService(this);
         preferenceUtil = new PreferenceUtil(this);
         authService = new AuthService(this);
+        notificationService = new com.fp.foodorderingsystem.services.NotificationService(this);
         executorService = Executors.newSingleThreadExecutor();
         mainHandler = new Handler(Looper.getMainLooper());
         
@@ -104,6 +112,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
             setupClickListeners();
             bindSidebarHeader();
             subscribeToRealtimeStreams();
+            loadNotifications();
             
             // Delay data loading to ensure UI is fully initialized
             if (mainHandler != null) {
@@ -144,16 +153,23 @@ public class AdminDashboardActivity extends AppCompatActivity {
             tvTotalRevenue = findViewById(R.id.tvTotalRevenue);
             tvPendingOrders = findViewById(R.id.tvPendingOrders);
             tvCompletedOrders = findViewById(R.id.tvCompletedOrders);
+            tvNotificationBadge = findViewById(R.id.tvNotificationBadge);
             
             // Initialize charts
             chartRevenue = findViewById(R.id.chartRevenue);
             chartOrders = findViewById(R.id.chartOrders);
             chartPopularItems = findViewById(R.id.chartPopularItems);
+            chartThroughput = findViewById(R.id.chartThroughput);
+            chartTraffic = findViewById(R.id.chartTraffic);
+            chartSatisfaction = findViewById(R.id.chartSatisfaction);
             
             // Setup charts
             setupRevenueChart();
             setupOrdersChart();
             setupPopularItemsChart();
+            setupThroughputChart();
+            setupTrafficChart();
+            setupSatisfactionChart();
             
             drawerLayout = findViewById(R.id.drawerLayout);
             navigationView = findViewById(R.id.navView);
@@ -584,6 +600,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
         super.onResume();
         // Refresh data when returning to dashboard - delay to avoid ANR
         if (preferenceUtil != null && preferenceUtil.isLoggedIn() && mainHandler != null) {
+            loadNotifications(); // Load notifications immediately
             mainHandler.postDelayed(() -> {
                 try {
                     loadDashboardData();
@@ -597,93 +614,38 @@ public class AdminDashboardActivity extends AppCompatActivity {
     private void setupRevenueChart() {
         if (chartRevenue == null) return;
         
-        chartRevenue.getDescription().setEnabled(false);
-        chartRevenue.setTouchEnabled(true);
-        chartRevenue.setDragEnabled(true);
-        chartRevenue.setScaleEnabled(true);
-        chartRevenue.setPinchZoom(true);
-        chartRevenue.setBackgroundColor(0xFFFFFFFF);
-        chartRevenue.getLegend().setEnabled(true);
-        chartRevenue.getLegend().setTextColor(0xFF1B1B1B);
-        chartRevenue.getLegend().setTextSize(12f);
+        // Apply modern chart styling
+        ChartStyleUtils.styleLineChart(chartRevenue);
+        chartRevenue.setExtraOffsets(12f, 12f, 12f, 12f);
+        chartRevenue.getLegend().setEnabled(false);
         
-        XAxis xAxis = chartRevenue.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setTextColor(0xFF6C757D);
-        xAxis.setTextSize(11f);
-        xAxis.setDrawGridLines(false);
-        xAxis.setGranularity(1f);
-        
+        // Set currency value formatter
         YAxis leftAxis = chartRevenue.getAxisLeft();
-        leftAxis.setTextColor(0xFF6C757D);
-        leftAxis.setTextSize(11f);
-        leftAxis.setDrawGridLines(true);
-        leftAxis.setGridColor(0xFFE9ECEF);
-        leftAxis.setValueFormatter(new ValueFormatter() {
-            @Override
-            public String getFormattedValue(float value) {
-                return "₱" + String.format(Locale.getDefault(), "%.0f", value);
-            }
-        });
-        
-        chartRevenue.getAxisRight().setEnabled(false);
+        leftAxis.setValueFormatter(new ChartStyleUtils.CurrencyValueFormatter());
     }
     
     private void setupOrdersChart() {
         if (chartOrders == null) return;
         
-        chartOrders.getDescription().setEnabled(false);
-        chartOrders.setUsePercentValues(true);
-        chartOrders.setDrawEntryLabels(false);
-        chartOrders.setRotationEnabled(true);
-        chartOrders.setHoleRadius(50f);
-        chartOrders.setTransparentCircleRadius(55f);
+        // Apply modern chart styling
+        ChartStyleUtils.stylePieChart(chartOrders);
         chartOrders.setCenterText("Orders");
         chartOrders.setCenterTextSize(16f);
-        chartOrders.setCenterTextColor(0xFF1B1B1B);
-        chartOrders.getLegend().setEnabled(true);
-        chartOrders.getLegend().setTextColor(0xFF1B1B1B);
-        chartOrders.getLegend().setTextSize(12f);
-        chartOrders.getLegend().setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-        chartOrders.getLegend().setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
-        chartOrders.getLegend().setOrientation(Legend.LegendOrientation.HORIZONTAL);
-        chartOrders.getLegend().setDrawInside(false);
+        chartOrders.setCenterTextColor(ChartStyleUtils.Colors.TEXT_DARK);
+        chartOrders.setExtraOffsets(8f, 8f, 8f, 8f);
     }
     
     private void setupPopularItemsChart() {
         if (chartPopularItems == null) return;
         
-        chartPopularItems.getDescription().setEnabled(false);
-        chartPopularItems.setTouchEnabled(true);
-        chartPopularItems.setDragEnabled(true);
-        chartPopularItems.setScaleEnabled(true);
-        chartPopularItems.setPinchZoom(true);
-        chartPopularItems.setBackgroundColor(0xFFFFFFFF);
-        chartPopularItems.getLegend().setEnabled(true);
-        chartPopularItems.getLegend().setTextColor(0xFF1B1B1B);
-        chartPopularItems.getLegend().setTextSize(12f);
-        chartPopularItems.getLegend().setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-        chartPopularItems.getLegend().setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
-        chartPopularItems.getLegend().setOrientation(Legend.LegendOrientation.HORIZONTAL);
-        chartPopularItems.getLegend().setDrawInside(false);
+        // Apply modern chart styling
+        ChartStyleUtils.styleBarChart(chartPopularItems);
+        chartPopularItems.setExtraOffsets(12f, 12f, 12f, 12f);
+        chartPopularItems.getLegend().setEnabled(false);
         
+        // Customize X axis label rotation
         XAxis xAxis = chartPopularItems.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setTextColor(0xFF6C757D);
-        xAxis.setTextSize(11f);
-        xAxis.setDrawGridLines(false);
-        xAxis.setGranularity(1f);
         xAxis.setLabelRotationAngle(-45f);
-        
-        YAxis leftAxis = chartPopularItems.getAxisLeft();
-        leftAxis.setTextColor(0xFF6C757D);
-        leftAxis.setTextSize(11f);
-        leftAxis.setDrawGridLines(true);
-        leftAxis.setGridColor(0xFFE9ECEF);
-        leftAxis.setGranularity(1f);
-        leftAxis.setAxisMinimum(0f);
-        
-        chartPopularItems.getAxisRight().setEnabled(false);
     }
     
     private void updateCharts(List<Order> orders) {
@@ -691,12 +653,18 @@ public class AdminDashboardActivity extends AppCompatActivity {
             updateRevenueChart(new ArrayList<>());
             updateOrdersChart(new ArrayList<>());
             updatePopularItemsChart(new ArrayList<>());
+            updateThroughputChart(new ArrayList<>());
+            updateTrafficChart(new ArrayList<>());
+            updateSatisfactionChart(new ArrayList<>());
             return;
         }
         
         updateRevenueChart(orders);
         updateOrdersChart(orders);
         updatePopularItemsChart(orders);
+        updateThroughputChart(orders);
+        updateTrafficChart(orders);
+        updateSatisfactionChart(orders);
     }
     
     private void updateRevenueChart(List<Order> orders) {
@@ -736,26 +704,14 @@ public class AdminDashboardActivity extends AppCompatActivity {
         }
         
         LineDataSet dataSet = new LineDataSet(entries, "Revenue");
-        dataSet.setColor(0xFF198754);
-        dataSet.setCircleColor(0xFF198754);
-        dataSet.setLineWidth(3f);
-        dataSet.setCircleRadius(5f);
-        dataSet.setDrawCircleHole(false);
-        dataSet.setValueTextColor(0xFF6C757D);
-        dataSet.setValueTextSize(10f);
-        dataSet.setFillColor(0xFF198754);
-        dataSet.setDrawFilled(true);
-        dataSet.setFillAlpha(30);
-        dataSet.setValueFormatter(new ValueFormatter() {
-            @Override
-            public String getFormattedValue(float value) {
-                return "₱" + String.format(Locale.getDefault(), "%.0f", value);
-            }
-        });
+        // Apply modern styling with green primary color
+        ChartStyleUtils.styleLineDataSet(dataSet, ChartStyleUtils.Colors.PRIMARY_GREEN);
+        dataSet.setValueFormatter(new ChartStyleUtils.CurrencyValueFormatter());
         
         LineData lineData = new LineData(dataSet);
         chartRevenue.setData(lineData);
         
+        // Set X-axis labels
         List<String> labels = new ArrayList<>();
         calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_YEAR, -6);
@@ -774,6 +730,8 @@ public class AdminDashboardActivity extends AppCompatActivity {
             }
         });
         
+        // Enable smooth animation
+        ChartStyleUtils.enableSmoothAnimations(chartRevenue);
         chartRevenue.invalidate();
     }
     
@@ -796,9 +754,6 @@ public class AdminDashboardActivity extends AppCompatActivity {
         }
         
         List<PieEntry> entries = new ArrayList<>();
-        int[] colors = {
-            0xFFFFC107, 0xFF0D6EFD, 0xFFFF9800, 0xFF17A2B8, 0xFF198754, 0xFFDC3545
-        };
         
         for (Map.Entry<String, Integer> entry : statusCount.entrySet()) {
             if (entry.getValue() > 0) {
@@ -811,21 +766,17 @@ public class AdminDashboardActivity extends AppCompatActivity {
         }
         
         PieDataSet dataSet = new PieDataSet(entries, "");
-        dataSet.setColors(colors, this);
-        dataSet.setValueTextColor(0xFFFFFFFF);
-        dataSet.setValueTextSize(12f);
-        dataSet.setSliceSpace(3f);
-        dataSet.setSelectionShift(5f);
+        // Use modern status colors
+        dataSet.setColors(ChartStyleUtils.getStatusColors());
+        // Apply modern pie chart styling
+        ChartStyleUtils.stylePieDataSet(dataSet);
         
         PieData pieData = new PieData(dataSet);
-        pieData.setValueFormatter(new ValueFormatter() {
-            @Override
-            public String getFormattedValue(float value) {
-                return String.valueOf((int) value);
-            }
-        });
+        pieData.setValueFormatter(new ChartStyleUtils.IntegerValueFormatter());
         
         chartOrders.setData(pieData);
+        // Enable smooth animation
+        ChartStyleUtils.enableSmoothAnimations(chartOrders);
         chartOrders.invalidate();
     }
     
@@ -865,15 +816,9 @@ public class AdminDashboardActivity extends AppCompatActivity {
         }
         
         BarDataSet dataSet = new BarDataSet(entries, "Quantity Sold");
-        dataSet.setColor(0xFF198754);
-        dataSet.setValueTextColor(0xFF1B1B1B);
-        dataSet.setValueTextSize(11f);
-        dataSet.setValueFormatter(new ValueFormatter() {
-            @Override
-            public String getFormattedValue(float value) {
-                return String.valueOf((int) value);
-            }
-        });
+        // Apply modern bar chart styling with secondary blue color
+        ChartStyleUtils.styleBarDataSet(dataSet, ChartStyleUtils.Colors.SECONDARY_BLUE);
+        dataSet.setValueFormatter(new ChartStyleUtils.IntegerValueFormatter());
         
         BarData barData = new BarData(dataSet);
         barData.setBarWidth(0.6f);
@@ -890,7 +835,180 @@ public class AdminDashboardActivity extends AppCompatActivity {
             }
         });
         
+        // Enable smooth animation
+        ChartStyleUtils.enableSmoothAnimations(chartPopularItems);
         chartPopularItems.invalidate();
+    }
+
+    private void setupThroughputChart() {
+        if (chartThroughput == null) return;
+        
+        // Apply modern bar chart styling
+        ChartStyleUtils.styleBarChart(chartThroughput);
+        chartThroughput.setExtraOffsets(8f, 8f, 8f, 8f);
+        chartThroughput.getLegend().setEnabled(false);
+    }
+
+    private void updateThroughputChart(List<Order> orders) {
+        if (chartThroughput == null) return;
+        List<BarEntry> entries = new ArrayList<>();
+        List<String> labels = new ArrayList<>();
+
+        // Last 12 hours throughput
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        SimpleDateFormat hourFmt = new SimpleDateFormat("ha", Locale.getDefault());
+        for (int i = 11; i >= 0; i--) {
+            Calendar slotStart = (Calendar) cal.clone();
+            slotStart.add(Calendar.HOUR_OF_DAY, -i);
+            Calendar slotEnd = (Calendar) slotStart.clone();
+            slotEnd.add(Calendar.HOUR_OF_DAY, 1);
+
+            int count = 0;
+            for (Order o : orders) {
+                if (o == null || o.getCreatedAt() == null) continue;
+                try {
+                    Date created = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).parse(o.getCreatedAt());
+                    if (created != null && !created.before(slotStart.getTime()) && created.before(slotEnd.getTime())) {
+                        count++;
+                    }
+                } catch (Exception ignored) { }
+            }
+            int index = 11 - i;
+            entries.add(new BarEntry(index, count));
+            labels.add(hourFmt.format(slotStart.getTime()));
+        }
+
+        BarDataSet dataSet = new BarDataSet(entries, "Orders/hour");
+        // Use accent orange color for throughput
+        ChartStyleUtils.styleBarDataSet(dataSet, ChartStyleUtils.Colors.ACCENT_ORANGE);
+        
+        BarData barData = new BarData(dataSet);
+        barData.setBarWidth(0.6f);
+        
+        chartThroughput.getXAxis().setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                int idx = (int) value;
+                return (idx >= 0 && idx < labels.size()) ? labels.get(idx) : "";
+            }
+        });
+
+        chartThroughput.setData(barData);
+        ChartStyleUtils.enableSmoothAnimations(chartThroughput);
+        chartThroughput.invalidate();
+    }
+
+    private void setupTrafficChart() {
+        if (chartTraffic == null) return;
+        
+        // Apply modern line chart styling
+        ChartStyleUtils.styleLineChart(chartTraffic);
+        chartTraffic.setExtraOffsets(10f, 10f, 10f, 10f);
+        chartTraffic.getLegend().setEnabled(false);
+    }
+
+    private void updateTrafficChart(List<Order> orders) {
+        if (chartTraffic == null) return;
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        cal.add(Calendar.DAY_OF_YEAR, -6);
+
+        List<Entry> entries = new ArrayList<>();
+        List<String> labels = new ArrayList<>();
+        SimpleDateFormat df = new SimpleDateFormat("MMM dd", Locale.getDefault());
+
+        for (int i = 0; i < 7; i++) {
+            Date start = cal.getTime();
+            cal.add(Calendar.DAY_OF_YEAR, 1);
+            Date end = cal.getTime();
+
+            int count = 0;
+            for (Order o : orders) {
+                if (o == null || o.getCreatedAt() == null) continue;
+                try {
+                    Date created = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).parse(o.getCreatedAt());
+                    if (created != null && created.after(start) && created.before(end)) {
+                        count++;
+                    }
+                } catch (Exception ignored) { }
+            }
+            entries.add(new Entry(i, count));
+            labels.add(df.format(start));
+        }
+
+        LineDataSet dataSet = new LineDataSet(entries, "Orders (7d)");
+        // Use secondary blue color for traffic chart
+        ChartStyleUtils.styleLineDataSet(dataSet, ChartStyleUtils.Colors.SECONDARY_BLUE);
+        dataSet.setValueFormatter(new ChartStyleUtils.IntegerValueFormatter());
+
+        chartTraffic.getXAxis().setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                int idx = (int) value;
+                return (idx >= 0 && idx < labels.size()) ? labels.get(idx) : "";
+            }
+        });
+
+        chartTraffic.setData(new LineData(dataSet));
+        ChartStyleUtils.enableSmoothAnimations(chartTraffic);
+        chartTraffic.invalidate();
+    }
+
+    private void setupSatisfactionChart() {
+        if (chartSatisfaction == null) return;
+        
+        // Apply modern pie chart styling
+        ChartStyleUtils.stylePieChart(chartSatisfaction);
+        chartSatisfaction.setCenterText("Status");
+        chartSatisfaction.setCenterTextSize(16f);
+        chartSatisfaction.setCenterTextColor(ChartStyleUtils.Colors.TEXT_DARK);
+    }
+
+    private void updateSatisfactionChart(List<Order> orders) {
+        if (chartSatisfaction == null) return;
+        Map<String, Integer> buckets = new HashMap<>();
+        buckets.put("Completed", 0);
+        buckets.put("Pending", 0);
+        buckets.put("Cancelled", 0);
+
+        for (Order o : orders) {
+            if (o == null || o.getStatus() == null) continue;
+            String status = o.getStatus().toLowerCase(Locale.US);
+            if (status.contains("cancel")) {
+                buckets.put("Cancelled", buckets.get("Cancelled") + 1);
+            } else if (status.contains("complete")) {
+                buckets.put("Completed", buckets.get("Completed") + 1);
+            } else {
+                buckets.put("Pending", buckets.get("Pending") + 1);
+            }
+        }
+
+        List<PieEntry> entries = new ArrayList<>();
+        for (Map.Entry<String, Integer> e : buckets.entrySet()) {
+            if (e.getValue() > 0) {
+                entries.add(new PieEntry(e.getValue(), e.getKey()));
+            }
+        }
+        if (entries.isEmpty()) {
+            entries.add(new PieEntry(1f, "No Data"));
+        }
+
+        PieDataSet dataSet = new PieDataSet(entries, "");
+        // Use status colors from ChartStyleUtils
+        dataSet.setColors(ChartStyleUtils.getStatusColors());
+        ChartStyleUtils.stylePieDataSet(dataSet);
+        dataSet.setValueFormatter(new ChartStyleUtils.IntegerValueFormatter());
+
+        chartSatisfaction.setData(new PieData(dataSet));
+        ChartStyleUtils.enableSmoothAnimations(chartSatisfaction);
+        chartSatisfaction.invalidate();
     }
     
     @Override
@@ -948,9 +1066,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
             @Override
             public void onChange(JsonObject payload) {
                 if (mainHandler != null) {
-                    mainHandler.post(() ->
-                        ToastUtil.show(AdminDashboardActivity.this,
-                            "New activity detected in notifications"));
+                    mainHandler.post(AdminDashboardActivity.this::loadNotifications);
                 }
             }
 
@@ -963,6 +1079,49 @@ public class AdminDashboardActivity extends AppCompatActivity {
         ordersRealtimeClient.subscribeToTable("public", "orders", orderListener);
         menuRealtimeClient.subscribeToTable("public", "menu_items", menuListener);
         notificationRealtimeClient.subscribeToTable("public", "notifications", notificationListener);
+    }
+
+    private void loadNotifications() {
+        String userId = preferenceUtil.getUserId();
+        if (android.text.TextUtils.isEmpty(userId)) {
+            updateNotificationBadge(0);
+            return;
+        }
+        
+        notificationService.getAllNotifications(new com.fp.foodorderingsystem.services.NotificationService.NotificationCallback() {
+            @Override
+            public void onSuccess(List<com.fp.foodorderingsystem.models.Notification> notifications) {
+                mainHandler.post(() -> {
+                    int unreadCount = 0;
+                    if (notifications != null) {
+                        for (com.fp.foodorderingsystem.models.Notification notification : notifications) {
+                            if (notification != null && !notification.isRead()) {
+                                unreadCount++;
+                            }
+                        }
+                    }
+                    updateNotificationBadge(unreadCount);
+                });
+            }
+            
+            @Override
+            public void onError(String error) {
+                mainHandler.post(() -> {
+                    updateNotificationBadge(0);
+                });
+            }
+        });
+    }
+    
+    private void updateNotificationBadge(int count) {
+        if (tvNotificationBadge != null) {
+            if (count > 0) {
+                tvNotificationBadge.setVisibility(TextView.VISIBLE);
+                tvNotificationBadge.setText(count > 99 ? "99+" : String.valueOf(count));
+            } else {
+                tvNotificationBadge.setVisibility(TextView.GONE);
+            }
+        }
     }
 
     private void disconnectRealtime() {

@@ -47,12 +47,15 @@ public class CustomerDashboardActivity extends AppCompatActivity {
     private FoodItemAdapter foodItemAdapter;
     private final List<Category> categories = new ArrayList<>();
     private final List<FoodItem> foodItems = new ArrayList<>();
+    private final List<FoodItem> filteredFoodItems = new ArrayList<>();
     private final List<CartItem> cartItems = new ArrayList<>();
     private SupabaseService supabaseService;
     private PreferenceUtil preferenceUtil;
     private CartService cartService;
+    private com.fp.foodorderingsystem.services.NotificationService notificationService;
     private Handler mainHandler;
     private String userId;
+    private String selectedCategoryId = null;
     private SupabaseRealtimeClient categoryRealtimeClient;
     private SupabaseRealtimeClient menuRealtimeClient;
     private SupabaseRealtimeClient notificationRealtimeClient;
@@ -65,6 +68,7 @@ public class CustomerDashboardActivity extends AppCompatActivity {
         supabaseService = SupabaseService.getInstance(this);
         preferenceUtil = new PreferenceUtil(this);
         cartService = new CartService(this);
+        notificationService = new com.fp.foodorderingsystem.services.NotificationService(this);
         mainHandler = new Handler(Looper.getMainLooper());
         userId = preferenceUtil.getUserId();
 
@@ -131,10 +135,12 @@ public class CustomerDashboardActivity extends AppCompatActivity {
         rvCategories.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         rvCategories.setAdapter(categoryAdapter);
         categoryAdapter.setOnItemClickListener(category -> {
-            // Future: filter items by category
+            // Filter items by selected category
+            selectedCategoryId = category != null ? String.valueOf(category.getId()) : null;
+            filterFoodItems();
         });
 
-        foodItemAdapter = new FoodItemAdapter(foodItems);
+        foodItemAdapter = new FoodItemAdapter(filteredFoodItems);
         rvPopularItems.setLayoutManager(new LinearLayoutManager(this));
         rvPopularItems.setAdapter(foodItemAdapter);
         foodItemAdapter.setOnItemClickListener(new FoodItemAdapter.OnItemClickListener() {
@@ -149,11 +155,47 @@ public class CustomerDashboardActivity extends AppCompatActivity {
             }
         });
     }
+    
+    private void filterFoodItems() {
+        filteredFoodItems.clear();
+        if (selectedCategoryId == null || selectedCategoryId.isEmpty()) {
+            // Show all items
+            filteredFoodItems.addAll(foodItems);
+        } else {
+            // Filter by category
+            try {
+                int selectedId = Integer.parseInt(selectedCategoryId);
+                for (FoodItem item : foodItems) {
+                    if (item != null && item.getCategoryId() == selectedId) {
+                        filteredFoodItems.add(item);
+                    }
+                }
+            } catch (NumberFormatException e) {
+                // If parsing fails, show all items
+                filteredFoodItems.addAll(foodItems);
+            }
+        }
+        foodItemAdapter.updateList(new ArrayList<>(filteredFoodItems));
+    }
 
     private void setupClickListeners() {
         findViewById(R.id.btnNotifications).setOnClickListener(v ->
             startActivity(new Intent(this, NotificationActivity.class))
         );
+        
+        // Setup "See All" button for popular items
+        TextView tvSeeAll = findViewById(R.id.tvSeeAll);
+        if (tvSeeAll != null) {
+            tvSeeAll.setOnClickListener(v -> {
+                // Clear category filter to show all items
+                selectedCategoryId = null;
+                // Reset category adapter selection
+                if (categoryAdapter != null) {
+                    categoryAdapter.updateList(new ArrayList<>(categories));
+                }
+                filterFoodItems();
+            });
+        }
 
         ExtendedFloatingActionButton fabCart = findViewById(R.id.fabCart);
         if (fabCart != null) {
@@ -204,20 +246,26 @@ public class CustomerDashboardActivity extends AppCompatActivity {
     private void loadCategories() {
         new Thread(() -> {
             try {
-                Request request = supabaseService.createRequest("categories").get().build();
+                Request request = supabaseService.createRequest("categories?select=*&order=name")
+                    .get().build();
                 Response response = supabaseService.executeRequest(request);
                 if (response.isSuccessful()) {
                     String json = response.body().string();
+                    android.util.Log.d("CustomerDashboard", "Categories JSON: " + json);
                     Category[] cats = supabaseService.getGson().fromJson(json, Category[].class);
                     categories.clear();
                     if (cats != null) {
                         for (Category cat : cats) {
+                            android.util.Log.d("CustomerDashboard", "Category: " + cat.getName() + ", imageUrl: " + cat.getImageUrl());
                             categories.add(cat);
                         }
                     }
                     mainHandler.post(() -> categoryAdapter.updateList(new ArrayList<>(categories)));
+                } else {
+                    android.util.Log.e("CustomerDashboard", "Failed to load categories: " + response.code());
                 }
             } catch (Exception e) {
+                android.util.Log.e("CustomerDashboard", "Error loading categories", e);
                 e.printStackTrace();
             }
         }).start();
@@ -238,7 +286,9 @@ public class CustomerDashboardActivity extends AppCompatActivity {
                             foodItems.add(item);
                         }
                     }
-                    mainHandler.post(() -> foodItemAdapter.updateList(new ArrayList<>(foodItems)));
+                    mainHandler.post(() -> {
+                        filterFoodItems(); // Apply current filter
+                    });
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -332,8 +382,48 @@ public class CustomerDashboardActivity extends AppCompatActivity {
     }
 
     private void loadNotifications() {
+        if (TextUtils.isEmpty(userId)) {
+            if (tvNotificationBadge != null) {
+                tvNotificationBadge.setVisibility(TextView.GONE);
+            }
+            return;
+        }
+        
+        notificationService.getNotifications(userId, new com.fp.foodorderingsystem.services.NotificationService.NotificationCallback() {
+            @Override
+            public void onSuccess(List<com.fp.foodorderingsystem.models.Notification> notifications) {
+                mainHandler.post(() -> {
+                    int unreadCount = 0;
+                    if (notifications != null) {
+                        for (com.fp.foodorderingsystem.models.Notification notification : notifications) {
+                            if (notification != null && !notification.isRead()) {
+                                unreadCount++;
+                            }
+                        }
+                    }
+                    updateNotificationBadge(unreadCount);
+                });
+            }
+            
+            @Override
+            public void onError(String error) {
+                mainHandler.post(() -> {
+                    if (tvNotificationBadge != null) {
+                        tvNotificationBadge.setVisibility(TextView.GONE);
+                    }
+                });
+            }
+        });
+    }
+    
+    private void updateNotificationBadge(int count) {
         if (tvNotificationBadge != null) {
-            tvNotificationBadge.setVisibility(TextView.GONE);
+            if (count > 0) {
+                tvNotificationBadge.setVisibility(TextView.VISIBLE);
+                tvNotificationBadge.setText(count > 99 ? "99+" : String.valueOf(count));
+            } else {
+                tvNotificationBadge.setVisibility(TextView.GONE);
+            }
         }
     }
 

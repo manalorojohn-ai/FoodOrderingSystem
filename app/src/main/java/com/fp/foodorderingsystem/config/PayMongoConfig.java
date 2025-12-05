@@ -16,13 +16,12 @@ public class PayMongoConfig {
     public static final String PAYMONGO_API_URL = "https://api.paymongo.com/v1";
     
     // PayMongo Public Key (used for client-side operations)
-    // Replace with your PayMongo test public key for local/dev use. Do NOT
-    // commit real keys to source control.
+    // Test public key for development/testing
     public static final String PAYMONGO_PUBLIC_KEY = "YOUR_PAYMONGO_PUBLIC_KEY";
     
     // PayMongo Secret Key (used for server-side operations)
-    // Keep this on the server in production. For local demos, inject via
-    // environment/gradle properties instead of hard-coding.
+    // Test secret key for development/testing
+    // WARNING: Never commit real production keys to source control
     public static final String PAYMONGO_SECRET_KEY = "YOUR_PAYMONGO_SECRET_KEY";
     
     // Payment method types supported
