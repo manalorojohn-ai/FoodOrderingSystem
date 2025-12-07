@@ -366,7 +366,13 @@ public class UserService {
                 JsonObject body = new JsonObject();
                 body.addProperty("profile_picture", profilePicturePath);
                 
-                Log.d(TAG, "Updating profile picture: " + profilePicturePath);
+                // Also set the full URL for easier access
+                String profilePictureUrl = supabaseService.getPublicUrl("profile-pictures", profilePicturePath);
+                if (profilePictureUrl != null && !profilePictureUrl.isEmpty()) {
+                    body.addProperty("profile_picture_url", profilePictureUrl);
+                }
+                
+                Log.d(TAG, "Updating profile picture: " + profilePicturePath + ", URL: " + profilePictureUrl);
                 
                 Request.Builder requestBuilder;
                 if (accessToken != null && !accessToken.isEmpty()) {
@@ -433,6 +439,49 @@ public class UserService {
                 }
             } catch (Exception e) {
                 Log.e(TAG, "patchUser error", e);
+                callback.onError("Error: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    /**
+     * Delete user account from Supabase
+     * This will delete the user record from the users table
+     * Note: Related data (orders, cart items) may need to be handled separately
+     * depending on database foreign key constraints
+     */
+    public void deleteUser(String userId, String accessToken, SimpleCallback callback) {
+        if (!NetworkUtil.isNetworkAvailable(context)) {
+            callback.onError("No internet connection");
+            return;
+        }
+
+        new Thread(() -> {
+            try {
+                String endpoint = "users?id=eq." + userId;
+                Log.d(TAG, "Deleting user: " + userId);
+                
+                Request.Builder requestBuilder;
+                if (accessToken != null && !accessToken.isEmpty()) {
+                    requestBuilder = supabaseService.createAuthenticatedRequest(endpoint, accessToken);
+                } else {
+                    requestBuilder = supabaseService.createRequest(endpoint);
+                }
+                
+                Request request = requestBuilder.delete().build();
+                Response response = supabaseService.executeRequest(request);
+                
+                if (response.isSuccessful()) {
+                    String responseBody = response.body() != null ? response.body().string() : "";
+                    Log.d(TAG, "User deleted successfully: " + responseBody);
+                    callback.onSuccess();
+                } else {
+                    String errorBody = response.body() != null ? response.body().string() : "";
+                    Log.e(TAG, "Delete user failed: " + response.code() + " - " + errorBody);
+                    callback.onError("Failed to delete account: " + response.code());
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "deleteUser error", e);
                 callback.onError("Error: " + e.getMessage());
             }
         }).start();

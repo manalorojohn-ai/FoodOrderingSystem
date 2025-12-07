@@ -19,9 +19,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/green_primary"
             app:title="My Cart"
-            app:titleTextColor="@color/text_white"
-            app:navigationIcon="@drawable/ic_back"
-            app:navigationIconTint="@color/text_white"/>
+            app:titleTextColor="@color/text_white"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 

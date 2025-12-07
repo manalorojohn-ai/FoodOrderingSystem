@@ -23,6 +23,8 @@ public class User {
     private String updatedAt;
     @SerializedName("profile_picture")
     private String profilePicture;
+    @SerializedName("profile_picture_url")
+    private String profilePictureUrl;
 
     public User() {}
 
@@ -74,6 +76,9 @@ public class User {
 
     public String getProfilePicture() { return profilePicture; }
     public void setProfilePicture(String profilePicture) { this.profilePicture = profilePicture; }
+
+    public String getProfilePictureUrl() { return profilePictureUrl; }
+    public void setProfilePictureUrl(String profilePictureUrl) { this.profilePictureUrl = profilePictureUrl; }
 
     public boolean isAdmin() {
         return "admin".equalsIgnoreCase(userType);

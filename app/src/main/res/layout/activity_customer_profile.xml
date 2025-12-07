@@ -17,9 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:title="Profile"
-            app:titleTextColor="@color/text_white"
-            app:navigationIcon="@drawable/ic_back"
-            app:navigationIconTint="@color/text_white" />
+            app:titleTextColor="@color/text_white" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -338,6 +336,24 @@
 
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Delete Account Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnDeleteAccount"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Delete Account"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_white"
+                app:cornerRadius="28dp"
+                app:backgroundTint="@color/error"
+                app:icon="@android:drawable/ic_menu_delete"
+                app:iconTint="@color/text_white"
+                app:iconGravity="textStart"
+                app:iconPadding="8dp"
+                android:layout_marginTop="8dp"/>
+
             <!-- Logout Button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnLogout"
@@ -354,7 +370,7 @@
                 app:iconTint="@color/text_white"
                 app:iconGravity="textStart"
                 app:iconPadding="8dp"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginTop="12dp"/>
 
         </LinearLayout>
 

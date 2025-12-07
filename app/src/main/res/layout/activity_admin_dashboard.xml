@@ -15,1285 +15,1248 @@
         android:layout_height="match_parent"
         android:background="#F5F7FA">
 
-    <!-- App Bar with Real-time Status -->
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.Material3.Dark.ActionBar"
-        android:elevation="8dp"
-        android:background="@color/green_primary">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/green_primary"
-            app:title="Dashboard"
-            app:subtitle="Real-time Analytics"
-            app:subtitleTextColor="@color/text_white"
-            app:titleTextColor="@color/text_white"
-            app:navigationIconTint="@color/text_white"
-            app:contentInsetStartWithNavigation="0dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="end"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:paddingEnd="12dp">
-
-                <!-- Connection Status Indicator -->
-                <View
-                    android:id="@+id/statusIndicator"
-                    android:layout_width="8dp"
-                    android:layout_height="8dp"
-                    android:background="@drawable/shape_circle_avatar"
-                    android:layout_marginEnd="6dp"
-                    android:contentDescription="Connection status" />
-
-                <FrameLayout
-                    android:id="@+id/btnNotifications"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:layout_marginEnd="4dp"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="8dp"
-                        android:src="@drawable/ic_notifications"
-                        android:tint="#FFFFFF"
-                        android:contentDescription="Notifications" />
-
-                    <TextView
-                        android:id="@+id/tvNotificationBadge"
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:layout_gravity="top|end"
-                        android:layout_marginTop="2dp"
-                        android:layout_marginEnd="2dp"
-                        android:background="@drawable/notification_badge"
-                        android:gravity="center"
-                        android:text="0"
-                        android:textColor="@color/text_white"
-                        android:textSize="9sp"
-                        android:textStyle="bold"
-                        android:visibility="gone" />
-
-                </FrameLayout>
-
-            </LinearLayout>
-
-        </com.google.android.material.appbar.MaterialToolbar>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-        <!-- Main Content - Optimized with ConstraintLayout -->
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefresh"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true"
-            android:clipToPadding="false">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+        <!-- App Bar with Real-time Status -->
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:paddingBottom="32dp">
+            android:theme="@style/ThemeOverlay.Material3.Dark.ActionBar"
+            android:elevation="8dp"
+            android:background="@color/green_primary">
 
-            <!-- Admin Summary Card -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardAdminSummary"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="28dp"
-                app:cardElevation="0dp"
-                app:cardUseCompatPadding="false"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/green_primary"
+                app:title="Dashboard"
+                app:subtitle="Real-time Analytics"
+                app:subtitleTextColor="@color/text_white"
+                app:titleTextColor="@color/text_white"
+                app:navigationIconTint="@color/text_white"
+                app:contentInsetStartWithNavigation="0dp">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_card_highlight"
-                    android:orientation="vertical"
-                    android:padding="20dp">
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingEnd="12dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                    <!-- Realtime Connection Status Indicator -->
+                    <View
+                        android:id="@+id/statusIndicator"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/shape_circle_avatar"
+                        android:contentDescription="Realtime connection status" />
+
+                    <FrameLayout
+                        android:id="@+id/btnNotifications"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:focusable="true">
 
                         <ImageView
-                            android:id="@+id/ivAdminAvatar"
-                            android:layout_width="56dp"
-                            android:layout_height="56dp"
-                            android:background="@drawable/bg_avatar_circle"
-                            android:padding="12dp"
-                            android:src="@drawable/ic_user_add"
-                            android:tint="@color/text_white"
-                            android:contentDescription="Admin profile" />
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="8dp"
+                            android:src="@drawable/ic_notifications"
+                            android:tint="#FFFFFF"
+                            android:contentDescription="Notifications" />
 
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/tvGreetingTitle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Welcome back!"
-                                android:textColor="@color/text_white"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:id="@+id/tvGreetingSubtitle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="2dp"
-                                android:text="Track orders, revenue, and alerts in real time."
-                                android:textColor="#E2F7EF"
-                                android:textSize="13sp" />
-
-                        </LinearLayout>
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chipStatusLive"
-                            style="@style/Widget.MaterialComponents.Chip.Action"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:text="Live"
-                            android:textAllCaps="false"
+                        <TextView
+                            android:id="@+id/tvNotificationBadge"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_gravity="top|end"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginEnd="2dp"
+                            android:background="@drawable/notification_badge"
+                            android:gravity="center"
+                            android:text="0"
                             android:textColor="@color/text_white"
-                            app:chipBackgroundColor="@color/green_primary"
-                            app:chipIcon="@drawable/ic_notifications"
-                            app:chipIconTint="@color/text_white"
-                            app:chipIconVisible="true"
-                            app:chipStrokeWidth="0dp" />
+                            android:textSize="9sp"
+                            android:textStyle="bold"
+                            android:visibility="gone" />
 
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/tvSummaryHint"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="Last sync • Just now"
-                        android:textColor="#C7FFF0"
-                        android:textSize="13sp" />
+                    </FrameLayout>
 
                 </LinearLayout>
 
-            </com.google.android.material.card.MaterialCardView>
+            </com.google.android.material.appbar.MaterialToolbar>
 
-            <!-- Overview Filters -->
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chipOverviewFilters"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                android:gravity="center"
-                app:singleSelection="true"
-                app:selectionRequired="true"
-                app:layout_constraintTop_toBottomOf="@id/cardAdminSummary"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+        </com.google.android.material.appbar.AppBarLayout>
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipToday"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:layout_width="wrap_content"
+        <!-- Main Content - SwipeRefreshLayout -->
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fillViewport="true"
+                android:clipToPadding="false">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:text="Today" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipWeek"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="This Week" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipMonth"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="This Month" />
-
-            </com.google.android.material.chip.ChipGroup>
-
-            <!-- Section Header -->
-            <TextView
-                    android:id="@+id/tvSectionHeader"
-                    android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="Today's Overview"
-                android:textColor="#212529"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:fontFamily="sans-serif-medium"
-                    android:layout_marginBottom="16dp"
-                    app:layout_constraintTop_toBottomOf="@id/chipOverviewFilters"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-
-                <!-- Stats Row 1 -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardTotalOrders"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_marginEnd="8dp"
-                    android:minHeight="140dp"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="6dp"
-                    app:cardBackgroundColor="@color/green_primary"
-                    app:layout_constraintHeight_min="140dp"
-                    app:layout_constraintTop_toBottomOf="@id/tvSectionHeader"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/cardTotalRevenue"
-                    app:layout_constraintBottom_toTopOf="@id/cardPendingOrders"
-                    app:layout_constraintWidth_percent="0.48"
-                    app:layout_constraintDimensionRatio="1:0.8">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
-                                android:background="@drawable/bg_avatar_circle"
-                                android:contentDescription="Total orders icon"
-                                android:padding="6dp"
-                                android:src="@drawable/ic_orders"
-                                android:tint="@color/text_white" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="10dp"
-                                android:text="Total Orders"
-                                android:textColor="#E8F0FE"
-                                android:textSize="13sp"
-                                android:textStyle="bold" />
-
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:id="@+id/tvTotalOrders"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:includeFontPadding="false"
-                            android:text="0"
-                            android:textColor="#FFFFFF"
-                            android:textSize="32sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/tvTotalOrdersTrend"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
-                            android:text="+8% vs yesterday"
-                            android:textColor="#EAF6FF"
-                            android:textSize="11sp" />
-
-                    </LinearLayout>
-
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardTotalRevenue"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_marginStart="8dp"
-                    android:minHeight="140dp"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="6dp"
-                    app:cardBackgroundColor="#20C997"
-                    app:layout_constraintHeight_min="140dp"
-                    app:layout_constraintTop_toTopOf="@id/cardTotalOrders"
-                    app:layout_constraintBottom_toBottomOf="@id/cardTotalOrders"
-                    app:layout_constraintStart_toEndOf="@id/cardTotalOrders"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintWidth_percent="0.48">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
-                                android:background="@drawable/bg_avatar_circle"
-                                android:padding="6dp"
-                                android:src="@drawable/ic_wallet"
-                                android:tint="@color/text_white"
-                                android:contentDescription="Total revenue icon" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="10dp"
-                                android:text="Total Revenue"
-                                android:textColor="#E8F0FE"
-                                android:textSize="13sp"
-                                android:textStyle="bold" />
-
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:id="@+id/tvTotalRevenue"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="₱0"
-                            android:textColor="#FFFFFF"
-                            android:textSize="32sp"
-                            android:textStyle="bold"
-                            android:maxLines="1"
-                            android:ellipsize="end"
-                            android:includeFontPadding="false" />
-
-                        <TextView
-                            android:id="@+id/tvTotalRevenueTrend"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
-                            android:text="+₱2.1K vs last week"
-                            android:textColor="#F3FFFB"
-                            android:textSize="11sp" />
-
-                    </LinearLayout>
-
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Stats Row 2 -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardPendingOrders"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:minHeight="140dp"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="6dp"
-                    app:cardBackgroundColor="#FFC107"
-                    app:layout_constraintHeight_min="140dp"
-                    app:layout_constraintTop_toBottomOf="@id/cardTotalOrders"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/cardCompletedOrders"
-                    app:layout_constraintWidth_percent="0.48">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
-                                android:background="@drawable/bg_avatar_circle"
-                                android:padding="6dp"
-                                android:src="@drawable/ic_notifications"
-                                android:tint="#212529"
-                                android:contentDescription="Pending icon" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="10dp"
-                                android:text="Pending"
-                                android:textColor="#212529"
-                                android:textSize="13sp"
-                                android:textStyle="bold" />
-
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:id="@+id/tvPendingOrders"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textColor="#212529"
-                            android:textSize="32sp"
-                            android:textStyle="bold"
-                            android:includeFontPadding="false" />
-
-                        <TextView
-                            android:id="@+id/tvPendingOrdersTrend"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
-                            android:text="Need attention"
-                            android:textColor="#6C4A00"
-                            android:textSize="11sp" />
-
-                    </LinearLayout>
-
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardCompletedOrders"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginStart="8dp"
-                    android:minHeight="140dp"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="6dp"
-                    app:cardBackgroundColor="#198754"
-                    app:layout_constraintHeight_min="140dp"
-                    app:layout_constraintTop_toBottomOf="@id/cardTotalRevenue"
-                    app:layout_constraintBottom_toBottomOf="@id/cardPendingOrders"
-                    app:layout_constraintStart_toEndOf="@id/cardPendingOrders"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintWidth_percent="0.48">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
-                                android:background="@drawable/bg_avatar_circle"
-                                android:padding="6dp"
-                                android:src="@drawable/ic_orders"
-                                android:tint="@color/text_white"
-                                android:contentDescription="Completed icon" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="10dp"
-                                android:text="Completed"
-                                android:textColor="#E8F0FE"
-                                android:textSize="13sp"
-                                android:textStyle="bold" />
-
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:id="@+id/tvCompletedOrders"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textColor="#FFFFFF"
-                            android:textSize="32sp"
-                            android:textStyle="bold"
-                            android:includeFontPadding="false" />
-
-                        <TextView
-                            android:id="@+id/tvCompletedOrdersTrend"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
-                            android:text="92% fulfillment"
-                            android:textColor="#D1FFE8"
-                            android:textSize="11sp" />
-
-                    </LinearLayout>
-
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Cancelled Orders Card -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardCancelledOrders"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="8dp"
-                    android:minHeight="140dp"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="6dp"
-                    app:cardBackgroundColor="#FFE8E8"
-                    app:layout_constraintHeight_min="140dp"
-                    app:layout_constraintTop_toBottomOf="@id/cardCompletedOrders"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/cardAverageOrderValue"
-                    app:layout_constraintBottom_toTopOf="@id/cardCompletionRate"
-                    app:layout_constraintWidth_percent="0.48"
-                    app:layout_constraintDimensionRatio="1:0.8">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
-                                android:background="@drawable/bg_avatar_circle"
-                                android:padding="6dp"
-                                android:src="@drawable/ic_delete"
-                                android:tint="#FF6B6B"
-                                android:contentDescription="Cancelled orders icon" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="10dp"
-                                android:text="Cancelled"
-                                android:textColor="#1B1B1B"
-                                android:textSize="13sp"
-                                android:textStyle="bold" />
-
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:id="@+id/tvCancelledOrders"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textColor="#FF6B6B"
-                            android:textSize="32sp"
-                            android:textStyle="bold"
-                            android:includeFontPadding="false" />
-
-                        <TextView
-                            android:id="@+id/tvCancelledOrdersTrend"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
-                            android:text="Low cancellation rate"
-                            android:textColor="#C4665F"
-                            android:textSize="11sp" />
-
-                    </LinearLayout>
-
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Average Order Value Card -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardAverageOrderValue"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginStart="8dp"
-                    android:minHeight="140dp"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="6dp"
-                    app:cardBackgroundColor="#E8F5FF"
-                    app:layout_constraintHeight_min="140dp"
-                    app:layout_constraintTop_toTopOf="@id/cardCancelledOrders"
-                    app:layout_constraintBottom_toBottomOf="@id/cardCancelledOrders"
-                    app:layout_constraintStart_toEndOf="@id/cardCancelledOrders"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintWidth_percent="0.48">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
-                                android:background="@drawable/bg_avatar_circle"
-                                android:padding="6dp"
-                                android:src="@drawable/ic_wallet"
-                                android:tint="#4A90E2"
-                                android:contentDescription="Average value icon" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="10dp"
-                                android:text="Avg Value"
-                                android:textColor="#1B1B1B"
-                                android:textSize="13sp"
-                                android:textStyle="bold" />
-
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:id="@+id/tvAverageOrderValue"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="₱0"
-                            android:textColor="#4A90E2"
-                            android:textSize="32sp"
-                            android:textStyle="bold"
-                            android:maxLines="1"
-                            android:ellipsize="end"
-                            android:includeFontPadding="false" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
-                            android:text="Per order average"
-                            android:textColor="#6C757D"
-                            android:textSize="11sp" />
-
-                    </LinearLayout>
-
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Completion Rate Card -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardCompletionRate"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginStart="8dp"
-                    android:minHeight="140dp"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="6dp"
-                    app:cardBackgroundColor="#F0E8FF"
-                    app:layout_constraintHeight_min="140dp"
-                    app:layout_constraintTop_toBottomOf="@id/cardAverageOrderValue"
-                    app:layout_constraintStart_toEndOf="@id/cardCancelledOrders"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintWidth_percent="0.48">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
-                                android:background="@drawable/bg_avatar_circle"
-                                android:padding="6dp"
-                                android:src="@drawable/ic_add"
-                                android:tint="#8B5CF6"
-                                android:contentDescription="Completion rate icon" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="10dp"
-                                android:text="Completion"
-                                android:textColor="#1B1B1B"
-                                android:textSize="13sp"
-                                android:textStyle="bold" />
-
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:id="@+id/tvCompletionRate"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0%"
-                            android:textColor="#8B5CF6"
-                            android:textSize="32sp"
-                            android:textStyle="bold"
-                            android:includeFontPadding="false" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
-                            android:text="Orders completed"
-                            android:textColor="#6C757D"
-                            android:textSize="11sp" />
-
-                    </LinearLayout>
-
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Last Sync Time -->
-                <TextView
-                    android:id="@+id/tvSyncTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="24dp"
-                    android:text="Last sync: Just now"
-                    android:textColor="#6C757D"
-                    android:textSize="12sp"
-                    app:layout_constraintTop_toBottomOf="@id/cardCompletionRate"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-
-                <!-- Health & Insights Section -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardOrderHealth"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginEnd="12dp"
-                    android:layout_marginTop="16dp"
-                    app:cardCornerRadius="24dp"
-                    app:cardElevation="4dp"
-                    app:cardUseCompatPadding="true"
-                    app:layout_constraintTop_toBottomOf="@id/tvSyncTime"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    android:padding="16dp"
+                    android:paddingBottom="32dp">
+
+                    <!-- Admin Summary Card -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardAdminSummary"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="20dp">
+                        android:layout_marginBottom="20dp"
+                        app:cardCornerRadius="24dp"
+                        app:cardElevation="4dp"
+                        app:cardBackgroundColor="@color/green_primary"
+                        app:cardUseCompatPadding="false"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/tvOrderHealthTitle"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Order Health"
-                                android:textColor="#1B1B1B"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:id="@+id/tvOrderHealthValue"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="92%"
-                                android:textColor="@color/green_primary"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
-
-                        </LinearLayout>
-
-                        <TextView
-                            android:id="@+id/tvOrderHealthSubtitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:text="On-time fulfillment rate"
-                            android:textColor="#6C757D"
-                            android:textSize="13sp" />
-
-                        <com.google.android.material.progressindicator.LinearProgressIndicator
-                            android:id="@+id/progressFulfillment"
-                            style="@style/Widget.MaterialComponents.LinearProgressIndicator"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
-                            android:indeterminate="false"
-                            android:progress="92"
-                            app:indicatorColor="@color/green_primary"
-                            app:trackColor="#FFECEFF1"
-                            app:trackThickness="6dp" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:src="@drawable/ic_notifications"
-                                android:tint="#6C757D"
-                                android:contentDescription="Alerts icon" />
-
-                            <TextView
-                                android:id="@+id/tvOrderHealthHint"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:text="2 delayed orders flagged for review."
-                                android:textColor="#6C757D"
-                                android:textSize="12sp" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Charts Section Header -->
-                <TextView
-                    android:id="@+id/tvAnalytics"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="📊 Analytics &amp; Insights"
-                    android:textColor="#212529"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif-medium"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginTop="32dp"
-                    android:layout_marginBottom="16dp"
-                    app:layout_constraintTop_toBottomOf="@id/cardOrderHealth"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-
-                <!-- Revenue Chart Card -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardRevenueChart"
-                    android:layout_width="0dp"
-                    android:layout_height="280dp"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginEnd="12dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="12dp"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="6dp"
-                    app:cardBackgroundColor="#FFFFFF"
-                    app:cardUseCompatPadding="false"
-                    app:layout_constraintTop_toBottomOf="@id/tvAnalytics"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp"
-                        android:paddingTop="14dp"
-                        android:paddingBottom="14dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_card_highlight"
                             android:orientation="vertical"
-                            android:layout_marginBottom="10dp">
+                            android:padding="20dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:id="@+id/ivAdminAvatar"
+                                    android:layout_width="56dp"
+                                    android:layout_height="56dp"
+                                    android:background="@drawable/bg_avatar_circle"
+                                    android:padding="12dp"
+                                    android:src="@drawable/ic_user_add"
+                                    android:tint="@color/text_white"
+                                    android:contentDescription="Admin profile" />
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="12dp"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tvGreetingTitle"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Welcome back!"
+                                        android:textColor="@color/text_white"
+                                        android:textSize="18sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/tvGreetingSubtitle"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="4dp"
+                                        android:text="Live updates from Supabase Realtime"
+                                        android:textColor="#E2F7EF"
+                                        android:textSize="13sp" />
+
+                                </LinearLayout>
+
+                                <com.google.android.material.chip.Chip
+                                    android:id="@+id/chipStatusLive"
+                                    style="@style/Widget.MaterialComponents.Chip.Action"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:text="● Live"
+                                    android:textAllCaps="false"
+                                    android:textColor="@color/text_white"
+                                    app:chipBackgroundColor="#4CAF50"
+                                    app:chipIconVisible="false"
+                                    app:chipStrokeWidth="0dp" />
+
+                            </LinearLayout>
 
                             <TextView
+                                android:id="@+id/tvSummaryHint"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Revenue Trend"
-                                android:textColor="#1B1B1B"
-                                android:textSize="16sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="2dp"
-                                android:text="Last 7 days"
-                                android:textColor="#6C757D"
+                                android:layout_marginTop="16dp"
+                                android:text="Last sync • Just now"
+                                android:textColor="#C7FFF0"
                                 android:textSize="12sp" />
 
                         </LinearLayout>
 
-                        <!-- Revenue Chart -->
-                        <com.github.mikephil.charting.charts.LineChart
-                            android:id="@+id/chartRevenue"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:layout_marginTop="12dp"
-                            android:layout_marginBottom="8dp" />
-
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Orders Chart Card -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardOrdersChart"
-                    android:layout_width="0dp"
-                    android:layout_height="280dp"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginEnd="12dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="12dp"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="6dp"
-                    app:cardBackgroundColor="#FFFFFF"
-                    app:cardUseCompatPadding="false"
-                    app:layout_constraintTop_toBottomOf="@id/cardRevenueChart"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp"
-                        android:paddingTop="14dp"
-                        android:paddingBottom="14dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_marginBottom="10dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Orders Overview"
-                                android:textColor="#1B1B1B"
-                                android:textSize="16sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="2dp"
-                                android:text="Status distribution"
-                                android:textColor="#6C757D"
-                                android:textSize="12sp" />
-
-                        </LinearLayout>
-
-                        <!-- Orders Chart -->
-                        <com.github.mikephil.charting.charts.PieChart
-                            android:id="@+id/chartOrders"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:layout_marginTop="12dp"
-                            android:layout_marginBottom="8dp" />
-
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Popular Items Chart Card -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardPopularItemsChart"
-                    android:layout_width="0dp"
-                    android:layout_height="280dp"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginEnd="12dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="20dp"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="6dp"
-                    app:cardBackgroundColor="#FFFFFF"
-                    app:cardUseCompatPadding="false"
-                    app:layout_constraintTop_toBottomOf="@id/cardOrdersChart"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp"
-                        android:paddingTop="14dp"
-                        android:paddingBottom="14dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_marginBottom="10dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Popular Items"
-                                android:textColor="#1B1B1B"
-                                android:textSize="16sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="2dp"
-                                android:text="Top sellers this week"
-                                android:textColor="#6C757D"
-                                android:textSize="12sp" />
-
-                        </LinearLayout>
-
-                        <!-- Popular Items Chart -->
-                        <com.github.mikephil.charting.charts.BarChart
-                            android:id="@+id/chartPopularItems"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:layout_marginTop="8dp" />
-
-                        </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
-                <!-- Insights Header -->
-                <TextView
-                    android:id="@+id/tvInsights"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="📈 Operational Insights"
-                    android:textColor="#212529"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif-medium"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginTop="28dp"
-                    android:layout_marginBottom="16dp"
-                    app:layout_constraintTop_toBottomOf="@id/cardPopularItemsChart"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    <!-- Overview Filters -->
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipOverviewFilters"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        android:gravity="center"
+                        app:singleSelection="true"
+                        app:selectionRequired="true"
+                        app:layout_constraintTop_toBottomOf="@id/cardAdminSummary"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
 
-                <!-- Throughput Chart -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardThroughput"
-                    android:layout_width="0dp"
-                    android:layout_height="240dp"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginEnd="12dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="12dp"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="6dp"
-                    app:cardBackgroundColor="#FFFFFF"
-                    app:cardUseCompatPadding="false"
-                    app:layout_constraintTop_toBottomOf="@id/tvInsights"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:paddingStart="20dp"
-                        android:paddingEnd="20dp"
-                        android:paddingTop="16dp"
-                        android:paddingBottom="16dp">
-
-                        <TextView
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipToday"
+                            style="@style/Widget.MaterialComponents.Chip.Filter"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Order Throughput"
-                            android:textColor="#1B1B1B"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
+                            android:checked="true"
+                            android:text="Today" />
 
-                        <TextView
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipWeek"
+                            style="@style/Widget.MaterialComponents.Chip.Filter"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:text="Orders processed per hour"
-                            android:textColor="#6C757D"
-                            android:textSize="13sp" />
+                            android:text="This Week" />
 
-                        <com.github.mikephil.charting.charts.BarChart
-                            android:id="@+id/chartThroughput"
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipMonth"
+                            style="@style/Widget.MaterialComponents.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="This Month" />
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                    <!-- Section Header -->
+                    <TextView
+                        android:id="@+id/tvSectionHeader"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:text="Today's Overview"
+                        android:textColor="#212529"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-medium"
+                        app:layout_constraintTop_toBottomOf="@id/chipOverviewFilters"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <!-- Stats Row 1: Total Orders & Revenue -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardTotalOrders"
+                        android:layout_width="0dp"
+                        android:layout_height="160dp"
+                        android:layout_marginEnd="8dp"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="6dp"
+                        app:cardBackgroundColor="@color/green_primary"
+                        app:layout_constraintTop_toBottomOf="@id/tvSectionHeader"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/cardTotalRevenue"
+                        app:layout_constraintWidth_percent="0.48">
+
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:layout_marginTop="12dp"
-                            android:minHeight="140dp" />
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:padding="16dp">
 
-                    </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
 
-                </com.google.android.material.card.MaterialCardView>
+                                <ImageView
+                                    android:layout_width="32dp"
+                                    android:layout_height="32dp"
+                                    android:background="@drawable/bg_avatar_circle"
+                                    android:contentDescription="Total orders icon"
+                                    android:padding="6dp"
+                                    android:src="@drawable/ic_orders"
+                                    android:tint="@color/text_white" />
 
-                <!-- Traffic Trend Chart -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardTraffic"
-                    android:layout_width="0dp"
-                    android:layout_height="230dp"
-                    android:layout_marginBottom="12dp"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="6dp"
-                    app:cardUseCompatPadding="true"
-                    app:layout_constraintTop_toBottomOf="@id/cardThroughput"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
+                                    android:text="Total Orders"
+                                    android:textColor="#E8F0FE"
+                                    android:textSize="13sp"
+                                    android:textStyle="bold" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:paddingStart="20dp"
-                        android:paddingEnd="20dp"
-                        android:paddingTop="16dp"
-                        android:paddingBottom="16dp">
+                            </LinearLayout>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Traffic Trend"
-                            android:textColor="#1B1B1B"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:layout_weight="1" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:text="Sessions and orders over time"
-                            android:textColor="#6C757D"
-                            android:textSize="13sp" />
+                            <TextView
+                                android:id="@+id/tvTotalOrders"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:includeFontPadding="false"
+                                android:text="0"
+                                android:textColor="#FFFFFF"
+                                android:textSize="36sp"
+                                android:textStyle="bold" />
 
-                        <com.github.mikephil.charting.charts.LineChart
-                            android:id="@+id/chartTraffic"
+                            <TextView
+                                android:id="@+id/tvTotalOrdersTrend"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:text="Real-time updates"
+                                android:textColor="#EAF6FF"
+                                android:textSize="11sp" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardTotalRevenue"
+                        android:layout_width="0dp"
+                        android:layout_height="160dp"
+                        android:layout_marginStart="8dp"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="6dp"
+                        app:cardBackgroundColor="#20C997"
+                        app:layout_constraintTop_toTopOf="@id/cardTotalOrders"
+                        app:layout_constraintStart_toEndOf="@id/cardTotalOrders"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintWidth_percent="0.48">
+
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:layout_marginTop="12dp"
-                            android:minHeight="140dp" />
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:padding="16dp">
 
-                    </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
 
-                </com.google.android.material.card.MaterialCardView>
+                                <ImageView
+                                    android:layout_width="32dp"
+                                    android:layout_height="32dp"
+                                    android:background="@drawable/bg_avatar_circle"
+                                    android:padding="6dp"
+                                    android:src="@drawable/ic_wallet"
+                                    android:tint="@color/text_white"
+                                    android:contentDescription="Total revenue icon" />
 
-                <!-- Satisfaction / Status Chart -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardSatisfaction"
-                    android:layout_width="0dp"
-                    android:layout_height="230dp"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="6dp"
-                    app:cardUseCompatPadding="true"
-                    app:layout_constraintTop_toBottomOf="@id/cardTraffic"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
+                                    android:text="Total Revenue"
+                                    android:textColor="#E8F0FE"
+                                    android:textSize="13sp"
+                                    android:textStyle="bold" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:paddingStart="20dp"
-                        android:paddingEnd="20dp"
-                        android:paddingTop="16dp"
-                        android:paddingBottom="16dp">
+                            </LinearLayout>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Status Breakdown"
-                            android:textColor="#1B1B1B"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:layout_weight="1" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:text="Completed vs pending vs canceled"
-                            android:textColor="#6C757D"
-                            android:textSize="13sp" />
+                            <TextView
+                                android:id="@+id/tvTotalRevenue"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="₱0"
+                                android:textColor="#FFFFFF"
+                                android:textSize="28sp"
+                                android:textStyle="bold"
+                                android:maxLines="1"
+                                android:ellipsize="end"
+                                android:includeFontPadding="false" />
 
-                        <com.github.mikephil.charting.charts.PieChart
-                            android:id="@+id/chartSatisfaction"
+                            <TextView
+                                android:id="@+id/tvTotalRevenueTrend"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:text="Live calculation"
+                                android:textColor="#F3FFFB"
+                                android:textSize="11sp" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- Stats Row 2: Pending & Completed -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardPendingOrders"
+                        android:layout_width="0dp"
+                        android:layout_height="160dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="8dp"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="6dp"
+                        app:cardBackgroundColor="#FFC107"
+                        app:layout_constraintTop_toBottomOf="@id/cardTotalOrders"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/cardCompletedOrders"
+                        app:layout_constraintWidth_percent="0.48">
+
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:layout_marginTop="12dp"
-                            android:minHeight="140dp" />
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:padding="16dp">
 
-                    </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
 
-                </com.google.android.material.card.MaterialCardView>
+                                <ImageView
+                                    android:layout_width="32dp"
+                                    android:layout_height="32dp"
+                                    android:background="@drawable/bg_avatar_circle"
+                                    android:padding="6dp"
+                                    android:src="@drawable/ic_notifications"
+                                    android:tint="#212529"
+                                    android:contentDescription="Pending icon" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
+                                    android:text="Pending"
+                                    android:textColor="#212529"
+                                    android:textSize="13sp"
+                                    android:textStyle="bold" />
 
-        </androidx.core.widget.NestedScrollView>
+                            </LinearLayout>
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:layout_weight="1" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+                            <TextView
+                                android:id="@+id/tvPendingOrders"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="#212529"
+                                android:textSize="36sp"
+                                android:textStyle="bold"
+                                android:includeFontPadding="false" />
+
+                            <TextView
+                                android:id="@+id/tvPendingOrdersTrend"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:text="Requires attention"
+                                android:textColor="#6C4A00"
+                                android:textSize="11sp" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardCompletedOrders"
+                        android:layout_width="0dp"
+                        android:layout_height="160dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginStart="8dp"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="6dp"
+                        app:cardBackgroundColor="#198754"
+                        app:layout_constraintTop_toBottomOf="@id/cardTotalRevenue"
+                        app:layout_constraintStart_toEndOf="@id/cardPendingOrders"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintWidth_percent="0.48">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="32dp"
+                                    android:layout_height="32dp"
+                                    android:background="@drawable/bg_avatar_circle"
+                                    android:padding="6dp"
+                                    android:src="@drawable/ic_orders"
+                                    android:tint="@color/text_white"
+                                    android:contentDescription="Completed icon" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
+                                    android:text="Completed"
+                                    android:textColor="#E8F0FE"
+                                    android:textSize="13sp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:layout_weight="1" />
+
+                            <TextView
+                                android:id="@+id/tvCompletedOrders"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="#FFFFFF"
+                                android:textSize="36sp"
+                                android:textStyle="bold"
+                                android:includeFontPadding="false" />
+
+                            <TextView
+                                android:id="@+id/tvCompletedOrdersTrend"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:text="Success rate"
+                                android:textColor="#D1FFE8"
+                                android:textSize="11sp" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- Additional Stats Row: Cancelled & Average Order Value -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardCancelledOrders"
+                        android:layout_width="0dp"
+                        android:layout_height="140dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="8dp"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="6dp"
+                        app:cardBackgroundColor="#FFE8E8"
+                        app:layout_constraintTop_toBottomOf="@id/cardPendingOrders"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/cardAverageOrderValue"
+                        app:layout_constraintWidth_percent="0.48">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:background="@drawable/bg_avatar_circle"
+                                    android:padding="6dp"
+                                    android:src="@drawable/ic_delete"
+                                    android:tint="#FF6B6B"
+                                    android:contentDescription="Cancelled orders icon" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
+                                    android:text="Cancelled"
+                                    android:textColor="#1B1B1B"
+                                    android:textSize="13sp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:layout_weight="1" />
+
+                            <TextView
+                                android:id="@+id/tvCancelledOrders"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="#FF6B6B"
+                                android:textSize="32sp"
+                                android:textStyle="bold"
+                                android:includeFontPadding="false" />
+
+                            <TextView
+                                android:id="@+id/tvCancelledOrdersTrend"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:text="Low rate"
+                                android:textColor="#C4665F"
+                                android:textSize="11sp" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardAverageOrderValue"
+                        android:layout_width="0dp"
+                        android:layout_height="140dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginStart="8dp"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="6dp"
+                        app:cardBackgroundColor="#E8F5FF"
+                        app:layout_constraintTop_toBottomOf="@id/cardCompletedOrders"
+                        app:layout_constraintStart_toEndOf="@id/cardCancelledOrders"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintWidth_percent="0.48">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:background="@drawable/bg_avatar_circle"
+                                    android:padding="6dp"
+                                    android:src="@drawable/ic_wallet"
+                                    android:tint="#4A90E2"
+                                    android:contentDescription="Average value icon" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
+                                    android:text="Avg Value"
+                                    android:textColor="#1B1B1B"
+                                    android:textSize="13sp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:layout_weight="1" />
+
+                            <TextView
+                                android:id="@+id/tvAverageOrderValue"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="₱0"
+                                android:textColor="#4A90E2"
+                                android:textSize="28sp"
+                                android:textStyle="bold"
+                                android:maxLines="1"
+                                android:ellipsize="end"
+                                android:includeFontPadding="false" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:text="Per order"
+                                android:textColor="#6C757D"
+                                android:textSize="11sp" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- Completion Rate Card -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardCompletionRate"
+                        android:layout_width="0dp"
+                        android:layout_height="140dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginStart="8dp"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="6dp"
+                        app:cardBackgroundColor="#F0E8FF"
+                        app:layout_constraintTop_toBottomOf="@id/cardCancelledOrders"
+                        app:layout_constraintStart_toEndOf="@id/cardAverageOrderValue"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintWidth_percent="0.48">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:background="@drawable/bg_avatar_circle"
+                                    android:padding="6dp"
+                                    android:src="@drawable/ic_add"
+                                    android:tint="#8B5CF6"
+                                    android:contentDescription="Completion rate icon" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
+                                    android:text="Completion"
+                                    android:textColor="#1B1B1B"
+                                    android:textSize="13sp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:layout_weight="1" />
+
+                            <TextView
+                                android:id="@+id/tvCompletionRate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0%"
+                                android:textColor="#8B5CF6"
+                                android:textSize="32sp"
+                                android:textStyle="bold"
+                                android:includeFontPadding="false" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:text="Success rate"
+                                android:textColor="#6C757D"
+                                android:textSize="11sp" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- Last Sync Time -->
+                    <TextView
+                        android:id="@+id/tvSyncTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginBottom="24dp"
+                        android:text="Last sync: Just now • Realtime active"
+                        android:textColor="#6C757D"
+                        android:textSize="12sp"
+                        app:layout_constraintTop_toBottomOf="@id/cardCompletionRate"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <!-- Order Health Card -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardOrderHealth"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        app:cardCornerRadius="24dp"
+                        app:cardElevation="4dp"
+                        app:cardUseCompatPadding="true"
+                        app:cardBackgroundColor="@color/white"
+                        app:layout_constraintTop_toBottomOf="@id/tvSyncTime"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="20dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tvOrderHealthTitle"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="Order Health"
+                                    android:textColor="#1B1B1B"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tvOrderHealthValue"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="92%"
+                                    android:textColor="@color/green_primary"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tvOrderHealthSubtitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="On-time fulfillment rate"
+                                android:textColor="#6C757D"
+                                android:textSize="13sp" />
+
+                            <com.google.android.material.progressindicator.LinearProgressIndicator
+                                android:id="@+id/progressFulfillment"
+                                style="@style/Widget.MaterialComponents.LinearProgressIndicator"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:indeterminate="false"
+                                android:progress="92"
+                                app:indicatorColor="@color/green_primary"
+                                app:trackColor="#FFECEFF1"
+                                app:trackThickness="6dp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:src="@drawable/ic_notifications"
+                                    android:tint="#6C757D"
+                                    android:contentDescription="Alerts icon" />
+
+                                <TextView
+                                    android:id="@+id/tvOrderHealthHint"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:text="All systems operational"
+                                    android:textColor="#6C757D"
+                                    android:textSize="12sp" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- Analytics Section Header -->
+                    <TextView
+                        android:id="@+id/tvAnalytics"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginBottom="16dp"
+                        android:text="📊 Analytics &amp; Insights"
+                        android:textColor="#212529"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-medium"
+                        app:layout_constraintTop_toBottomOf="@id/cardOrderHealth"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <!-- Revenue Chart Card -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardRevenueChart"
+                        android:layout_width="0dp"
+                        android:layout_height="280dp"
+                        android:layout_marginTop="16dp"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="6dp"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardUseCompatPadding="false"
+                        app:layout_constraintTop_toBottomOf="@id/tvAnalytics"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="16dp"
+                            android:paddingTop="14dp"
+                            android:paddingBottom="14dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_marginBottom="10dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Revenue Trend"
+                                    android:textColor="#1B1B1B"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:text="Last 7 days • Real-time"
+                                    android:textColor="#6C757D"
+                                    android:textSize="12sp" />
+
+                            </LinearLayout>
+
+                            <com.github.mikephil.charting.charts.LineChart
+                                android:id="@+id/chartRevenue"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:layout_marginTop="12dp"
+                                android:layout_marginBottom="8dp" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- Orders Chart Card -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardOrdersChart"
+                        android:layout_width="0dp"
+                        android:layout_height="280dp"
+                        android:layout_marginTop="12dp"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="6dp"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardUseCompatPadding="false"
+                        app:layout_constraintTop_toBottomOf="@id/cardRevenueChart"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="16dp"
+                            android:paddingTop="14dp"
+                            android:paddingBottom="14dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_marginBottom="10dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Orders Overview"
+                                    android:textColor="#1B1B1B"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:text="Status distribution • Live"
+                                    android:textColor="#6C757D"
+                                    android:textSize="12sp" />
+
+                            </LinearLayout>
+
+                            <com.github.mikephil.charting.charts.PieChart
+                                android:id="@+id/chartOrders"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:layout_marginTop="12dp"
+                                android:layout_marginBottom="8dp" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- Popular Items Chart Card -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardPopularItemsChart"
+                        android:layout_width="0dp"
+                        android:layout_height="280dp"
+                        android:layout_marginTop="12dp"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="6dp"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardUseCompatPadding="false"
+                        app:layout_constraintTop_toBottomOf="@id/cardOrdersChart"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="16dp"
+                            android:paddingTop="14dp"
+                            android:paddingBottom="14dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_marginBottom="10dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Popular Items"
+                                    android:textColor="#1B1B1B"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:text="Top sellers • Updated live"
+                                    android:textColor="#6C757D"
+                                    android:textSize="12sp" />
+
+                            </LinearLayout>
+
+                            <com.github.mikephil.charting.charts.BarChart
+                                android:id="@+id/chartPopularItems"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:layout_marginTop="8dp" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- Insights Section Header -->
+                    <TextView
+                        android:id="@+id/tvInsights"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="28dp"
+                        android:layout_marginBottom="16dp"
+                        android:text="📈 Operational Insights"
+                        android:textColor="#212529"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-medium"
+                        app:layout_constraintTop_toBottomOf="@id/cardPopularItemsChart"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <!-- Throughput Chart -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardThroughput"
+                        android:layout_width="0dp"
+                        android:layout_height="240dp"
+                        android:layout_marginTop="12dp"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="6dp"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardUseCompatPadding="false"
+                        app:layout_constraintTop_toBottomOf="@id/tvInsights"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:paddingStart="20dp"
+                            android:paddingEnd="20dp"
+                            android:paddingTop="16dp"
+                            android:paddingBottom="16dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Order Throughput"
+                                android:textColor="#1B1B1B"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="Orders processed per hour • Real-time"
+                                android:textColor="#6C757D"
+                                android:textSize="13sp" />
+
+                            <com.github.mikephil.charting.charts.BarChart
+                                android:id="@+id/chartThroughput"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:layout_marginTop="12dp"
+                                android:minHeight="140dp" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- Traffic Trend Chart -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardTraffic"
+                        android:layout_width="0dp"
+                        android:layout_height="230dp"
+                        android:layout_marginTop="12dp"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="6dp"
+                        app:cardUseCompatPadding="true"
+                        app:cardBackgroundColor="@color/white"
+                        app:layout_constraintTop_toBottomOf="@id/cardThroughput"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:paddingStart="20dp"
+                            android:paddingEnd="20dp"
+                            android:paddingTop="16dp"
+                            android:paddingBottom="16dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Traffic Trend"
+                                android:textColor="#1B1B1B"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="Sessions and orders over time • Live updates"
+                                android:textColor="#6C757D"
+                                android:textSize="13sp" />
+
+                            <com.github.mikephil.charting.charts.LineChart
+                                android:id="@+id/chartTraffic"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:layout_marginTop="12dp"
+                                android:minHeight="140dp" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- Status Breakdown Chart -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardSatisfaction"
+                        android:layout_width="0dp"
+                        android:layout_height="230dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="20dp"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="6dp"
+                        app:cardUseCompatPadding="true"
+                        app:cardBackgroundColor="@color/white"
+                        app:layout_constraintTop_toBottomOf="@id/cardTraffic"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:paddingStart="20dp"
+                            android:paddingEnd="20dp"
+                            android:paddingTop="16dp"
+                            android:paddingBottom="16dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Status Breakdown"
+                                android:textColor="#1B1B1B"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="Completed vs pending vs canceled • Real-time"
+                                android:textColor="#6C757D"
+                                android:textSize="13sp" />
+
+                            <com.github.mikephil.charting.charts.PieChart
+                                android:id="@+id/chartSatisfaction"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:layout_marginTop="12dp"
+                                android:minHeight="140dp" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.core.widget.NestedScrollView>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <!-- Navigation Drawer -->
     <com.google.android.material.navigation.NavigationView

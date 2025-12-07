@@ -152,25 +152,70 @@ public class ProfileActivity extends AppCompatActivity {
         }
         
         if (!TextUtils.isEmpty(userId)) {
-            userService.getUserById(userId, accessToken, new UserService.UserCallback() {
-                @Override
-                public void onSuccess(User user) {
-                    mainHandler.post(() -> {
-                        currentUser = user;
-                        updateUI(user);
-                        if (loaderView != null) {
-                            loaderView.hideLoader();
+            loadUserDataWithToken(userId, accessToken);
+        } else {
+            if (loaderView != null) {
+                loaderView.hideLoader();
+            }
+        }
+    }
+    
+    private void loadUserDataWithToken(String userId, String accessToken) {
+        userService.getUserById(userId, accessToken, new UserService.UserCallback() {
+            @Override
+            public void onSuccess(User user) {
+                mainHandler.post(() -> {
+                    currentUser = user;
+                    updateUI(user);
+                    if (loaderView != null) {
+                        loaderView.hideLoader();
+                    }
+                });
+            }
+            
+            @Override
+            public void onError(String error) {
+                // Check if it's a 401 error (authentication failed)
+                if (error != null && error.contains("401")) {
+                    android.util.Log.d("ProfileActivity", "401 error detected, attempting to refresh token...");
+                    // Try to refresh the token and retry
+                    authService.refreshAccessToken(new AuthService.TokenCallback() {
+                        @Override
+                        public void onSuccess(String newAccessToken) {
+                            android.util.Log.d("ProfileActivity", "Token refreshed successfully, retrying user data load...");
+                            // Retry with new token
+                            loadUserDataWithToken(userId, newAccessToken);
+                        }
+                        
+                        @Override
+                        public void onError(String refreshError) {
+                            android.util.Log.e("ProfileActivity", "Token refresh failed: " + refreshError);
+                            mainHandler.post(() -> {
+                                // Still show basic data from preferences
+                                if (currentUser != null) {
+                                    tvPhone.setText(TextUtils.isEmpty(currentUser.getPhone()) ? "Not set" : currentUser.getPhone());
+                                    tvAddress.setText(TextUtils.isEmpty(currentUser.getAddress()) ? "Not set" : currentUser.getAddress());
+                                    // Try to load profile picture from cached user data
+                                    loadProfilePicture(currentUser);
+                                } else {
+                                    tvPhone.setText("Not set");
+                                    tvAddress.setText("Not set");
+                                }
+                                if (loaderView != null) {
+                                    loaderView.hideLoader();
+                                }
+                                android.util.Log.e("ProfileActivity", "Failed to load user data: " + error);
+                            });
                         }
                     });
-                }
-                
-                @Override
-                public void onError(String error) {
+                } else {
                     mainHandler.post(() -> {
                         // Still show basic data from preferences
                         if (currentUser != null) {
                             tvPhone.setText(TextUtils.isEmpty(currentUser.getPhone()) ? "Not set" : currentUser.getPhone());
                             tvAddress.setText(TextUtils.isEmpty(currentUser.getAddress()) ? "Not set" : currentUser.getAddress());
+                            // Try to load profile picture from cached user data
+                            loadProfilePicture(currentUser);
                         } else {
                             tvPhone.setText("Not set");
                             tvAddress.setText("Not set");
@@ -181,12 +226,8 @@ public class ProfileActivity extends AppCompatActivity {
                         android.util.Log.e("ProfileActivity", "Failed to load user data: " + error);
                     });
                 }
-            });
-        } else {
-            if (loaderView != null) {
-                loaderView.hideLoader();
             }
-        }
+        });
     }
     
     private void updateUI(User user) {
@@ -236,21 +277,69 @@ public class ProfileActivity extends AppCompatActivity {
     }
     
     private void loadProfilePicture(User user) {
-        if (user == null || ivProfilePicture == null) return;
+        if (ivProfilePicture == null) return;
         
-        String profilePicture = user.getProfilePicture();
-        if (!TextUtils.isEmpty(profilePicture)) {
-            // Construct the public URL for the profile picture
-            String imageUrl = supabaseService.getPublicUrl(BUCKET_NAME, profilePicture);
+        // If user is null, try to use currentUser as fallback
+        if (user == null) {
+            user = currentUser;
+        }
+        
+        if (user == null) {
+            android.util.Log.d("ProfileActivity", "No user data available, using default avatar");
+            ivProfilePicture.setImageResource(R.drawable.ic_food_banner);
+            return;
+        }
+        
+        String imageUrl = null;
+        
+        // First, try to use profile_picture_url if it exists (full URL)
+        String profilePictureUrl = user.getProfilePictureUrl();
+        if (!TextUtils.isEmpty(profilePictureUrl)) {
+            imageUrl = profilePictureUrl;
+            android.util.Log.d("ProfileActivity", "Using profile_picture_url from database: " + imageUrl);
+        } else {
+            // Fall back to constructing URL from profile_picture path
+            String profilePicture = user.getProfilePicture();
+            if (!TextUtils.isEmpty(profilePicture)) {
+                // If it's already a full URL, use it directly
+                if (profilePicture.startsWith("http://") || profilePicture.startsWith("https://")) {
+                    imageUrl = profilePicture;
+                    android.util.Log.d("ProfileActivity", "Profile picture is already a full URL: " + imageUrl);
+                } else {
+                    // Construct the public URL for the profile picture
+                    imageUrl = supabaseService.getPublicUrl(BUCKET_NAME, profilePicture);
+                    android.util.Log.d("ProfileActivity", "Constructed profile picture URL from path: " + imageUrl);
+                }
+            }
+        }
+        
+        if (!TextUtils.isEmpty(imageUrl)) {
+            // Create a final copy for use in inner class
+            final String finalImageUrl = imageUrl;
+            android.util.Log.d("ProfileActivity", "Loading profile picture from URL: " + finalImageUrl);
             
             Glide.with(this)
-                .load(imageUrl)
+                .load(finalImageUrl)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.drawable.ic_food_banner)
                 .error(R.drawable.ic_food_banner)
                 .circleCrop()
+                .listener(new com.bumptech.glide.request.RequestListener<android.graphics.drawable.Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@androidx.annotation.Nullable com.bumptech.glide.load.engine.GlideException e, Object model, com.bumptech.glide.request.target.Target<android.graphics.drawable.Drawable> target, boolean isFirstResource) {
+                        android.util.Log.e("ProfileActivity", "Failed to load profile picture: " + (e != null ? e.getMessage() : "Unknown error") + ", URL: " + finalImageUrl);
+                        return false;
+                    }
+                    
+                    @Override
+                    public boolean onResourceReady(android.graphics.drawable.Drawable resource, Object model, com.bumptech.glide.request.target.Target<android.graphics.drawable.Drawable> target, com.bumptech.glide.load.DataSource dataSource, boolean isFirstResource) {
+                        android.util.Log.d("ProfileActivity", "Profile picture loaded successfully");
+                        return false;
+                    }
+                })
                 .into(ivProfilePicture);
         } else {
+            android.util.Log.d("ProfileActivity", "No profile picture path or URL, using default avatar");
             // Use default avatar
             ivProfilePicture.setImageResource(R.drawable.ic_food_banner);
         }
@@ -266,21 +355,18 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.btnEditProfile).setOnClickListener(v -> showEditProfileDialog());
+        
+        findViewById(R.id.btnDeleteAccount).setOnClickListener(v -> showDeleteAccountDialog());
     }
     
     private void showImagePickerDialog() {
-        String[] options = {"Take Photo", "Choose from Gallery", "Cancel"};
+        // Camera option removed - requires privacy policy for Google Play
+        // Can be re-enabled after adding privacy policy URL in Google Play Console
+        String[] options = {"Choose from Gallery", "Cancel"};
         new AlertDialog.Builder(this)
             .setTitle("Select Profile Picture")
             .setItems(options, (dialog, which) -> {
                 if (which == 0) {
-                    // Take Photo
-                    if (checkCameraPermission()) {
-                        openCamera();
-                    } else {
-                        requestCameraPermission();
-                    }
-                } else if (which == 1) {
                     // Choose from Gallery
                     if (checkStoragePermission()) {
                         openGallery();
@@ -364,21 +450,33 @@ public class ProfileActivity extends AppCompatActivity {
     }
     
     private void uploadImage(Bitmap bitmap) {
-        if (currentUser == null) {
-            ToastUtil.show(this, "User data not loaded");
+        String userId = preferenceUtil.getUserId();
+        if (TextUtils.isEmpty(userId)) {
+            ToastUtil.show(this, "User ID not found. Please login again.");
             return;
         }
         
-        String userId = preferenceUtil.getUserId();
+        // If currentUser is null, try to load it but don't block the upload
+        if (currentUser == null) {
+            // Try to load user data in background
+            loadUserData();
+        }
+        
         String accessToken = authService.getAccessToken();
         if (TextUtils.isEmpty(accessToken)) {
             accessToken = preferenceUtil.getAccessToken();
         }
         
-        if (TextUtils.isEmpty(userId)) {
-            ToastUtil.show(this, "User ID not found");
+        if (TextUtils.isEmpty(accessToken)) {
+            ToastUtil.show(this, "Authentication token not found. Please login again.");
             return;
         }
+        
+        uploadImageWithToken(bitmap, accessToken);
+    }
+    
+    private void uploadImageWithToken(Bitmap bitmap, String accessToken) {
+        String userId = preferenceUtil.getUserId();
         
         // Show loading
         if (loaderView != null) {
@@ -410,38 +508,39 @@ public class ProfileActivity extends AppCompatActivity {
                 
                 if (response.isSuccessful()) {
                     // Update user record with profile picture path
-                    userService.updateProfilePicture(finalUserId, fileName, finalAccessToken, new UserService.UserCallback() {
-                        @Override
-                        public void onSuccess(User updatedUser) {
-                            mainHandler.post(() -> {
-                                currentUser = updatedUser;
-                                loadProfilePicture(updatedUser);
-                                if (loaderView != null) {
-                                    loaderView.hideLoader();
-                                }
-                                ToastUtil.show(ProfileActivity.this, "Profile picture updated successfully");
-                            });
-                        }
-                        
-                        @Override
-                        public void onError(String error) {
-                            mainHandler.post(() -> {
-                                if (loaderView != null) {
-                                    loaderView.hideLoader();
-                                }
-                                ToastUtil.show(ProfileActivity.this, "Failed to update profile picture: " + error);
-                            });
-                        }
-                    });
+                    updateProfilePictureWithToken(finalUserId, fileName, finalAccessToken);
                 } else {
-                    String errorBody = response.body() != null ? response.body().string() : "";
-                    mainHandler.post(() -> {
-                        if (loaderView != null) {
-                            loaderView.hideLoader();
-                        }
-                        android.util.Log.e("ProfileActivity", "Upload failed: " + response.code() + " - " + errorBody);
-                        ToastUtil.show(ProfileActivity.this, "Failed to upload image: " + response.code());
-                    });
+                    // Check if it's a 401 error
+                    if (response.code() == 401) {
+                        android.util.Log.d("ProfileActivity", "401 error on upload, refreshing token...");
+                        authService.refreshAccessToken(new AuthService.TokenCallback() {
+                            @Override
+                            public void onSuccess(String newAccessToken) {
+                                android.util.Log.d("ProfileActivity", "Token refreshed, retrying upload...");
+                                // Retry upload with new token
+                                uploadImageWithToken(bitmap, newAccessToken);
+                            }
+                            
+                            @Override
+                            public void onError(String refreshError) {
+                                mainHandler.post(() -> {
+                                    if (loaderView != null) {
+                                        loaderView.hideLoader();
+                                    }
+                                    ToastUtil.show(ProfileActivity.this, "Authentication failed. Please login again.");
+                                });
+                            }
+                        });
+                    } else {
+                        String errorBody = response.body() != null ? response.body().string() : "";
+                        mainHandler.post(() -> {
+                            if (loaderView != null) {
+                                loaderView.hideLoader();
+                            }
+                            android.util.Log.e("ProfileActivity", "Upload failed: " + response.code() + " - " + errorBody);
+                            ToastUtil.show(ProfileActivity.this, "Failed to upload image: " + response.code());
+                        });
+                    }
                 }
             } catch (Exception e) {
                 mainHandler.post(() -> {
@@ -470,6 +569,55 @@ public class ProfileActivity extends AppCompatActivity {
         return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true);
     }
     
+    private void updateProfilePictureWithToken(String userId, String fileName, String accessToken) {
+        userService.updateProfilePicture(userId, fileName, accessToken, new UserService.UserCallback() {
+            @Override
+            public void onSuccess(User updatedUser) {
+                mainHandler.post(() -> {
+                    currentUser = updatedUser;
+                    loadProfilePicture(updatedUser);
+                    if (loaderView != null) {
+                        loaderView.hideLoader();
+                    }
+                    ToastUtil.show(ProfileActivity.this, "Profile picture updated successfully");
+                });
+            }
+            
+            @Override
+            public void onError(String error) {
+                // Check if it's a 401 error
+                if (error != null && error.contains("401")) {
+                    android.util.Log.d("ProfileActivity", "401 error on update profile picture, refreshing token...");
+                    authService.refreshAccessToken(new AuthService.TokenCallback() {
+                        @Override
+                        public void onSuccess(String newAccessToken) {
+                            android.util.Log.d("ProfileActivity", "Token refreshed, retrying update profile picture...");
+                            // Retry with new token
+                            updateProfilePictureWithToken(userId, fileName, newAccessToken);
+                        }
+                        
+                        @Override
+                        public void onError(String refreshError) {
+                            mainHandler.post(() -> {
+                                if (loaderView != null) {
+                                    loaderView.hideLoader();
+                                }
+                                ToastUtil.show(ProfileActivity.this, "Authentication failed. Please login again.");
+                            });
+                        }
+                    });
+                } else {
+                    mainHandler.post(() -> {
+                        if (loaderView != null) {
+                            loaderView.hideLoader();
+                        }
+                        ToastUtil.show(ProfileActivity.this, "Failed to update profile picture: " + error);
+                    });
+                }
+            }
+        });
+    }
+    
     private void subscribeToRealtimeUpdates() {
         String userId = preferenceUtil.getUserId();
         if (TextUtils.isEmpty(userId)) {
@@ -496,7 +644,12 @@ public class ProfileActivity extends AppCompatActivity {
     }
     
     private void handleRealtimePayload(JsonObject payload) {
-        if (payload == null || currentUser == null) {
+        if (payload == null) {
+            return;
+        }
+        
+        String userId = preferenceUtil.getUserId();
+        if (TextUtils.isEmpty(userId)) {
             return;
         }
         
@@ -508,29 +661,84 @@ public class ProfileActivity extends AppCompatActivity {
         }
         
         JsonObject newRecord = null;
+        JsonObject oldRecord = null;
+        
         if (payload.has("new")) {
             newRecord = payload.getAsJsonObject("new");
         } else if (payload.has("new_record")) {
             newRecord = payload.getAsJsonObject("new_record");
         }
         
-        if ("UPDATE".equalsIgnoreCase(eventType) && newRecord != null && newRecord.has("id")) {
-            String updatedUserId = newRecord.get("id").getAsString();
-            if (updatedUserId.equals(currentUser.getId())) {
-                // This is an update to the current user
-                try {
-                    com.google.gson.Gson gson = new com.google.gson.Gson();
-                    User updatedUser = gson.fromJson(newRecord, User.class);
-                    if (updatedUser != null) {
-                        mainHandler.post(() -> {
-                            currentUser = updatedUser;
-                            updateUI(updatedUser);
-                        });
-                    }
-                } catch (Exception e) {
-                    android.util.Log.e("ProfileActivity", "Error parsing user from realtime payload", e);
+        if (payload.has("old")) {
+            oldRecord = payload.getAsJsonObject("old");
+        } else if (payload.has("old_record")) {
+            oldRecord = payload.getAsJsonObject("old_record");
+        }
+        
+        String recordUserId = null;
+        if (newRecord != null && newRecord.has("id")) {
+            recordUserId = newRecord.get("id").getAsString();
+        } else if (oldRecord != null && oldRecord.has("id")) {
+            recordUserId = oldRecord.get("id").getAsString();
+        }
+        
+        // Only process if this is the current user
+        if (!userId.equals(recordUserId)) {
+            return;
+        }
+        
+        if ("UPDATE".equalsIgnoreCase(eventType) && newRecord != null) {
+            // Handle user update
+            try {
+                com.google.gson.Gson gson = new com.google.gson.Gson();
+                User updatedUser = gson.fromJson(newRecord, User.class);
+                if (updatedUser != null) {
+                    mainHandler.post(() -> {
+                        currentUser = updatedUser;
+                        updateUI(updatedUser);
+                        
+                        // Update preferences with latest data
+                        preferenceUtil.saveUserData(
+                            updatedUser.getId(),
+                            updatedUser.getEmail(),
+                            updatedUser.getFullName(),
+                            updatedUser.getUserType()
+                        );
+                        
+                        android.util.Log.d("ProfileActivity", "Profile updated via realtime");
+                    });
                 }
+            } catch (Exception e) {
+                android.util.Log.e("ProfileActivity", "Error parsing user from realtime payload", e);
+                // Fallback: reload user data
+                mainHandler.post(() -> loadUserData());
             }
+        } else if ("INSERT".equalsIgnoreCase(eventType) && newRecord != null) {
+            // Handle new user creation (shouldn't happen for existing user, but handle it)
+            try {
+                com.google.gson.Gson gson = new com.google.gson.Gson();
+                User newUser = gson.fromJson(newRecord, User.class);
+                if (newUser != null) {
+                    mainHandler.post(() -> {
+                        currentUser = newUser;
+                        updateUI(newUser);
+                    });
+                }
+            } catch (Exception e) {
+                android.util.Log.e("ProfileActivity", "Error parsing new user from realtime payload", e);
+            }
+        } else if ("DELETE".equalsIgnoreCase(eventType)) {
+            // Handle user deletion
+            mainHandler.post(() -> {
+                android.util.Log.d("ProfileActivity", "User account deleted via realtime");
+                // Clear data and logout
+                preferenceUtil.clearAll();
+                authService.logout();
+                Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            });
         }
     }
     
@@ -548,11 +756,9 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void showEditProfileDialog() {
+        // If currentUser is null, try to load it but don't block the dialog
         if (currentUser == null) {
-            // Load user data first
             loadUserData();
-            ToastUtil.show(this, "Loading profile data...");
-            return;
         }
         
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_edit_profile, null);
@@ -562,11 +768,19 @@ public class ProfileActivity extends AppCompatActivity {
         TextInputEditText etPhone = dialogView.findViewById(R.id.etPhone);
         TextInputEditText etAddress = dialogView.findViewById(R.id.etAddress);
         
-        // Populate fields
-        etFullName.setText(currentUser.getFullName() != null ? currentUser.getFullName() : "");
-        etEmail.setText(currentUser.getEmail() != null ? currentUser.getEmail() : "");
-        etPhone.setText(currentUser.getPhone() != null ? currentUser.getPhone() : "");
-        etAddress.setText(currentUser.getAddress() != null ? currentUser.getAddress() : "");
+        // Populate fields from currentUser if available, otherwise use preferences or UI values
+        if (currentUser != null) {
+            etFullName.setText(currentUser.getFullName() != null ? currentUser.getFullName() : "");
+            etEmail.setText(currentUser.getEmail() != null ? currentUser.getEmail() : "");
+            etPhone.setText(currentUser.getPhone() != null ? currentUser.getPhone() : "");
+            etAddress.setText(currentUser.getAddress() != null ? currentUser.getAddress() : "");
+        } else {
+            // Use data from preferences or UI
+            etFullName.setText(tvName.getText().toString());
+            etEmail.setText(tvEmail.getText().toString());
+            etPhone.setText(tvPhone.getText().toString().equals("Not set") ? "" : tvPhone.getText().toString());
+            etAddress.setText(tvAddress.getText().toString().equals("Not set") ? "" : tvAddress.getText().toString());
+        }
         
         AlertDialog dialog = new AlertDialog.Builder(this, R.style.CustomDialogTheme)
             .setView(dialogView)
@@ -617,6 +831,10 @@ public class ProfileActivity extends AppCompatActivity {
         }
         dialog.dismiss();
         
+        saveProfileWithToken(userId, fullName, phone, address, accessToken);
+    }
+    
+    private void saveProfileWithToken(String userId, String fullName, String phone, String address, String accessToken) {
         userService.updateUserProfile(userId, fullName, phone, address, accessToken, new UserService.UserCallback() {
             @Override
             public void onSuccess(User updatedUser) {
@@ -644,12 +862,35 @@ public class ProfileActivity extends AppCompatActivity {
             
             @Override
             public void onError(String error) {
-                mainHandler.post(() -> {
-                    if (loaderView != null) {
-                        loaderView.hideLoader();
-                    }
-                    ToastUtil.show(ProfileActivity.this, "Failed to update profile: " + error);
-                });
+                // Check if it's a 401 error
+                if (error != null && error.contains("401")) {
+                    android.util.Log.d("ProfileActivity", "401 error on save profile, refreshing token...");
+                    authService.refreshAccessToken(new AuthService.TokenCallback() {
+                        @Override
+                        public void onSuccess(String newAccessToken) {
+                            android.util.Log.d("ProfileActivity", "Token refreshed, retrying save profile...");
+                            // Retry with new token
+                            saveProfileWithToken(userId, fullName, phone, address, newAccessToken);
+                        }
+                        
+                        @Override
+                        public void onError(String refreshError) {
+                            mainHandler.post(() -> {
+                                if (loaderView != null) {
+                                    loaderView.hideLoader();
+                                }
+                                ToastUtil.show(ProfileActivity.this, "Authentication failed. Please login again.");
+                            });
+                        }
+                    });
+                } else {
+                    mainHandler.post(() -> {
+                        if (loaderView != null) {
+                            loaderView.hideLoader();
+                        }
+                        ToastUtil.show(ProfileActivity.this, "Failed to update profile: " + error);
+                    });
+                }
             }
         });
     }
@@ -661,7 +902,90 @@ public class ProfileActivity extends AppCompatActivity {
             finish();
             return;
         }
+        // Reload user data to ensure we have the latest
         loadUserData();
+        // Reconnect realtime if needed
+        if (realtimeClient == null) {
+            subscribeToRealtimeUpdates();
+        }
+    }
+    
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Keep realtime connection alive, but we can disconnect if needed
+        // Realtime will reconnect automatically when activity resumes
+    }
+    
+    private void showDeleteAccountDialog() {
+        new AlertDialog.Builder(this)
+            .setTitle("Delete Account")
+            .setMessage("Are you sure you want to delete your account? This action cannot be undone. All your data including orders, profile information, and preferences will be permanently deleted.")
+            .setPositiveButton("Delete", (dialog, which) -> {
+                deleteAccount();
+            })
+            .setNegativeButton("Cancel", null)
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .show();
+    }
+    
+    private void deleteAccount() {
+        String userId = preferenceUtil.getUserId();
+        String accessToken = authService.getAccessToken();
+        if (TextUtils.isEmpty(accessToken)) {
+            accessToken = preferenceUtil.getAccessToken();
+        }
+        
+        if (TextUtils.isEmpty(userId)) {
+            ToastUtil.show(this, "User ID not found");
+            return;
+        }
+        
+        // Show loading
+        if (loaderView != null) {
+            loaderView.showLoader();
+        }
+        
+        // Disconnect realtime client before deletion
+        if (realtimeClient != null) {
+            realtimeClient.disconnect();
+        }
+        
+        userService.deleteUser(userId, accessToken, new UserService.SimpleCallback() {
+            @Override
+            public void onSuccess() {
+                mainHandler.post(() -> {
+                    // Clear all local data
+                    preferenceUtil.clearAll();
+                    
+                    // Logout
+                    authService.logout();
+                    
+                    if (loaderView != null) {
+                        loaderView.hideLoader();
+                    }
+                    
+                    ToastUtil.show(ProfileActivity.this, "Account deleted successfully");
+                    
+                    // Redirect to login
+                    Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
+                });
+            }
+            
+            @Override
+            public void onError(String error) {
+                mainHandler.post(() -> {
+                    if (loaderView != null) {
+                        loaderView.hideLoader();
+                    }
+                    ToastUtil.show(ProfileActivity.this, "Failed to delete account: " + error);
+                    android.util.Log.e("ProfileActivity", "Delete account error: " + error);
+                });
+            }
+        });
     }
     
     @Override

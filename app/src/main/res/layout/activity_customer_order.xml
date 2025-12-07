@@ -17,9 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:title="My Orders"
-            app:titleTextColor="@color/text_white"
-            app:navigationIcon="@drawable/ic_back"
-            app:navigationIconTint="@color/text_white" />
+            app:titleTextColor="@color/text_white" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.fp.foodorderingsystem.R;
-import com.fp.foodorderingsystem.adapters.OrderAdapter;
+import com.fp.foodorderingsystem.adapters.CustomerOrderAdapter;
 import com.fp.foodorderingsystem.models.Order;
 import com.fp.foodorderingsystem.services.OrderService;
 import com.fp.foodorderingsystem.services.SupabaseRealtimeClient;
@@ -34,7 +34,7 @@ public class OrderHistoryActivity extends AppCompatActivity {
     private ChipGroup chipStatusFilters;
     private TextView tvPendingCount, tvPreparingCount, tvDeliveringCount, tvCompletedCount;
     private View emptyStateLayout;
-    private OrderAdapter orderAdapter;
+    private CustomerOrderAdapter orderAdapter;
     private final List<Order> orders = new ArrayList<>();
     private final List<Order> filteredOrders = new ArrayList<>();
     private OrderService orderService;
@@ -148,7 +148,7 @@ public class OrderHistoryActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView() {
-        orderAdapter = new OrderAdapter(filteredOrders);
+        orderAdapter = new CustomerOrderAdapter(filteredOrders);
         rvOrders.setLayoutManager(new LinearLayoutManager(this));
         rvOrders.setAdapter(orderAdapter);
         orderAdapter.setOnItemClickListener(order -> {
