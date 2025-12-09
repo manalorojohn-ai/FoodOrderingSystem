@@ -27,6 +27,10 @@ android {
         manifestPlaceholders = [
                 mapsApiKey: localProperties.getProperty("MAPS_API_KEY", "")
         ]
+
+        // PayMongo keys injected from local.properties (do not commit real keys)
+        buildConfigField "String", "PAYMONGO_PUBLIC_KEY", "\"${localProperties.getProperty('PAYMONGO_PUBLIC_KEY', 'pk_test_placeholder')}\""
+        buildConfigField "String", "PAYMONGO_SECRET_KEY", "\"${localProperties.getProperty('PAYMONGO_SECRET_KEY', 'sk_test_placeholder')}\""
     }
 
     buildTypes {

@@ -16,12 +16,12 @@ public class PayMongoConfig {
     public static final String PAYMONGO_API_URL = "https://api.paymongo.com/v1";
     
     // PayMongo Public Key (used for client-side operations)
-    // TODO: Inject via BuildConfig / env for real projects
-    public static final String PAYMONGO_PUBLIC_KEY = "pk_test_REPLACE_ME";
+    // Injected via BuildConfig; configure in local.properties as PAYMONGO_PUBLIC_KEY
+    public static final String PAYMONGO_PUBLIC_KEY = BuildConfig.PAYMONGO_PUBLIC_KEY;
     
     // PayMongo Secret Key (used for server-side operations)
-    // WARNING: Never commit real production keys to source control
-    public static final String PAYMONGO_SECRET_KEY = "sk_test_REPLACE_ME";
+    // Injected via BuildConfig; configure in local.properties as PAYMONGO_SECRET_KEY
+    public static final String PAYMONGO_SECRET_KEY = BuildConfig.PAYMONGO_SECRET_KEY;
     
     // Payment method types supported
     public static final String PAYMENT_METHOD_GCASH = "gcash";
