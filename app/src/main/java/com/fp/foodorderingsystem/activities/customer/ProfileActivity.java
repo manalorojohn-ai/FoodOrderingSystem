@@ -161,20 +161,20 @@ public class ProfileActivity extends AppCompatActivity {
     }
     
     private void loadUserDataWithToken(String userId, String accessToken) {
-        userService.getUserById(userId, accessToken, new UserService.UserCallback() {
-            @Override
-            public void onSuccess(User user) {
-                mainHandler.post(() -> {
-                    currentUser = user;
-                    updateUI(user);
-                    if (loaderView != null) {
-                        loaderView.hideLoader();
-                    }
-                });
-            }
-            
-            @Override
-            public void onError(String error) {
+            userService.getUserById(userId, accessToken, new UserService.UserCallback() {
+                @Override
+                public void onSuccess(User user) {
+                    mainHandler.post(() -> {
+                        currentUser = user;
+                        updateUI(user);
+                        if (loaderView != null) {
+                            loaderView.hideLoader();
+                        }
+                    });
+                }
+                
+                @Override
+                public void onError(String error) {
                 // Check if it's a 401 error (authentication failed)
                 if (error != null && error.contains("401")) {
                     android.util.Log.d("ProfileActivity", "401 error detected, attempting to refresh token...");
@@ -190,25 +190,25 @@ public class ProfileActivity extends AppCompatActivity {
                         @Override
                         public void onError(String refreshError) {
                             android.util.Log.e("ProfileActivity", "Token refresh failed: " + refreshError);
-                            mainHandler.post(() -> {
-                                // Still show basic data from preferences
-                                if (currentUser != null) {
-                                    tvPhone.setText(TextUtils.isEmpty(currentUser.getPhone()) ? "Not set" : currentUser.getPhone());
-                                    tvAddress.setText(TextUtils.isEmpty(currentUser.getAddress()) ? "Not set" : currentUser.getAddress());
+                    mainHandler.post(() -> {
+                        // Still show basic data from preferences
+                        if (currentUser != null) {
+                            tvPhone.setText(TextUtils.isEmpty(currentUser.getPhone()) ? "Not set" : currentUser.getPhone());
+                            tvAddress.setText(TextUtils.isEmpty(currentUser.getAddress()) ? "Not set" : currentUser.getAddress());
                                     // Try to load profile picture from cached user data
                                     loadProfilePicture(currentUser);
-                                } else {
-                                    tvPhone.setText("Not set");
-                                    tvAddress.setText("Not set");
-                                }
-                                if (loaderView != null) {
-                                    loaderView.hideLoader();
-                                }
-                                android.util.Log.e("ProfileActivity", "Failed to load user data: " + error);
-                            });
+                        } else {
+                            tvPhone.setText("Not set");
+                            tvAddress.setText("Not set");
                         }
+                        if (loaderView != null) {
+                            loaderView.hideLoader();
+                        }
+                        android.util.Log.e("ProfileActivity", "Failed to load user data: " + error);
                     });
-                } else {
+                }
+            });
+        } else {
                     mainHandler.post(() -> {
                         // Still show basic data from preferences
                         if (currentUser != null) {
@@ -220,12 +220,12 @@ public class ProfileActivity extends AppCompatActivity {
                             tvPhone.setText("Not set");
                             tvAddress.setText("Not set");
                         }
-                        if (loaderView != null) {
-                            loaderView.hideLoader();
-                        }
+            if (loaderView != null) {
+                loaderView.hideLoader();
+            }
                         android.util.Log.e("ProfileActivity", "Failed to load user data: " + error);
                     });
-                }
+        }
             }
         });
     }
@@ -300,13 +300,13 @@ public class ProfileActivity extends AppCompatActivity {
         } else {
             // Fall back to constructing URL from profile_picture path
             String profilePicture = user.getProfilePicture();
-            if (!TextUtils.isEmpty(profilePicture)) {
+        if (!TextUtils.isEmpty(profilePicture)) {
                 // If it's already a full URL, use it directly
                 if (profilePicture.startsWith("http://") || profilePicture.startsWith("https://")) {
                     imageUrl = profilePicture;
                     android.util.Log.d("ProfileActivity", "Profile picture is already a full URL: " + imageUrl);
                 } else {
-                    // Construct the public URL for the profile picture
+            // Construct the public URL for the profile picture
                     imageUrl = supabaseService.getPublicUrl(BUCKET_NAME, profilePicture);
                     android.util.Log.d("ProfileActivity", "Constructed profile picture URL from path: " + imageUrl);
                 }
@@ -514,32 +514,32 @@ public class ProfileActivity extends AppCompatActivity {
                     if (response.code() == 401) {
                         android.util.Log.d("ProfileActivity", "401 error on upload, refreshing token...");
                         authService.refreshAccessToken(new AuthService.TokenCallback() {
-                            @Override
+                        @Override
                             public void onSuccess(String newAccessToken) {
                                 android.util.Log.d("ProfileActivity", "Token refreshed, retrying upload...");
                                 // Retry upload with new token
                                 uploadImageWithToken(bitmap, newAccessToken);
-                            }
-                            
-                            @Override
+                        }
+                        
+                        @Override
                             public void onError(String refreshError) {
-                                mainHandler.post(() -> {
-                                    if (loaderView != null) {
-                                        loaderView.hideLoader();
-                                    }
+                            mainHandler.post(() -> {
+                                if (loaderView != null) {
+                                    loaderView.hideLoader();
+                                }
                                     ToastUtil.show(ProfileActivity.this, "Authentication failed. Please login again.");
-                                });
-                            }
-                        });
-                    } else {
-                        String errorBody = response.body() != null ? response.body().string() : "";
-                        mainHandler.post(() -> {
-                            if (loaderView != null) {
-                                loaderView.hideLoader();
-                            }
-                            android.util.Log.e("ProfileActivity", "Upload failed: " + response.code() + " - " + errorBody);
-                            ToastUtil.show(ProfileActivity.this, "Failed to upload image: " + response.code());
-                        });
+                            });
+                        }
+                    });
+                } else {
+                    String errorBody = response.body() != null ? response.body().string() : "";
+                    mainHandler.post(() -> {
+                        if (loaderView != null) {
+                            loaderView.hideLoader();
+                        }
+                        android.util.Log.e("ProfileActivity", "Upload failed: " + response.code() + " - " + errorBody);
+                        ToastUtil.show(ProfileActivity.this, "Failed to upload image: " + response.code());
+                    });
                     }
                 }
             } catch (Exception e) {
@@ -770,10 +770,10 @@ public class ProfileActivity extends AppCompatActivity {
         
         // Populate fields from currentUser if available, otherwise use preferences or UI values
         if (currentUser != null) {
-            etFullName.setText(currentUser.getFullName() != null ? currentUser.getFullName() : "");
-            etEmail.setText(currentUser.getEmail() != null ? currentUser.getEmail() : "");
-            etPhone.setText(currentUser.getPhone() != null ? currentUser.getPhone() : "");
-            etAddress.setText(currentUser.getAddress() != null ? currentUser.getAddress() : "");
+        etFullName.setText(currentUser.getFullName() != null ? currentUser.getFullName() : "");
+        etEmail.setText(currentUser.getEmail() != null ? currentUser.getEmail() : "");
+        etPhone.setText(currentUser.getPhone() != null ? currentUser.getPhone() : "");
+        etAddress.setText(currentUser.getAddress() != null ? currentUser.getAddress() : "");
         } else {
             // Use data from preferences or UI
             etFullName.setText(tvName.getText().toString());
@@ -884,12 +884,12 @@ public class ProfileActivity extends AppCompatActivity {
                         }
                     });
                 } else {
-                    mainHandler.post(() -> {
-                        if (loaderView != null) {
-                            loaderView.hideLoader();
-                        }
-                        ToastUtil.show(ProfileActivity.this, "Failed to update profile: " + error);
-                    });
+                mainHandler.post(() -> {
+                    if (loaderView != null) {
+                        loaderView.hideLoader();
+                    }
+                    ToastUtil.show(ProfileActivity.this, "Failed to update profile: " + error);
+                });
                 }
             }
         });

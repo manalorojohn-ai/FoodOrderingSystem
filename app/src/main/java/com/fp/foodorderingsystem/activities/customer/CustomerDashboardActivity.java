@@ -422,7 +422,7 @@ public class CustomerDashboardActivity extends AppCompatActivity {
                 tvNotificationBadge.setVisibility(TextView.VISIBLE);
                 tvNotificationBadge.setText(count > 99 ? "99+" : String.valueOf(count));
             } else {
-                tvNotificationBadge.setVisibility(TextView.GONE);
+            tvNotificationBadge.setVisibility(TextView.GONE);
             }
         }
     }

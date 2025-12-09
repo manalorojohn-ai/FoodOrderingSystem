@@ -1,0 +1,23 @@
+<en-US>
+🎉 Welcome to Eat&Run - Your Food Ordering Companion!
+
+What's New in Version 1.0:
+• Complete food ordering system with real-time updates
+• User-friendly dashboard with category filtering
+• Secure payment integration
+• Order tracking and history
+• Admin dashboard with analytics and charts
+• Push notifications for order updates
+• Modern and intuitive UI/UX
+
+Features:
+✓ Browse menu items by category
+✓ Add items to cart and checkout securely
+✓ Track your orders in real-time
+✓ View order history
+✓ Manage your profile
+✓ Admin tools for order and user management
+
+We're excited to have you on board! Enjoy ordering your favorite meals.
+</en-US>
+

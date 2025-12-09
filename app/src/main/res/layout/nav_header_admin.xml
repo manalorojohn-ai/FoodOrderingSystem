@@ -36,7 +36,7 @@
                     android:id="@+id/imgSidebarAvatar"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
-                    android:src="@drawable/logo"
+                    android:src="@drawable/ic_food_banner"
                     android:scaleType="centerCrop"
                     android:contentDescription="@string/app_name"
                     app:shapeAppearanceOverlay="@style/SidebarAvatarShape"
@@ -128,7 +128,7 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_menu_nav"
+                android:src="@drawable/ic_list"
                 android:tint="#0D6EFD"
                 android:contentDescription="@string/app_name" />
 
@@ -139,6 +139,35 @@
                 android:layout_weight="1"
                 android:layout_marginStart="16dp"
                 android:text="Management"
+                android:textColor="#212529"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btnNavCategories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="16dp"
+            android:background="?attr/selectableItemBackground"
+            android:layout_marginBottom="4dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_categories"
+                android:tint="#6F42C1"
+                android:contentDescription="@string/app_name" />
+
+            <TextView
+                android:id="@+id/tvNavCategoriesLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="16dp"
+                android:text="Categories"
                 android:textColor="#212529"
                 android:textStyle="bold"
                 android:textSize="16sp" />
@@ -157,7 +186,7 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_orders"
+                android:src="@drawable/ic_time"
                 android:tint="#20C997"
                 android:contentDescription="@string/app_name" />
 
@@ -186,7 +215,7 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_profile_nav"
+                android:src="@drawable/ic_avatar"
                 android:tint="#FFC107"
                 android:contentDescription="@string/app_name" />
 

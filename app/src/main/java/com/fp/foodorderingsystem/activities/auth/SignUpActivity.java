@@ -46,9 +46,10 @@ public class SignUpActivity extends AppCompatActivity {
     private boolean isValidEmail = false;
     private boolean isEmailAvailable = false;
     private boolean isValidPhone = false;
-    private boolean isValidAddress = false;
+    private boolean isValidAddress = true; // address validation disabled per request
     private boolean isValidPassword = false;
     private boolean isPasswordMatch = false;
+    private boolean isSubmitting = false;
     
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
     private boolean isCheckingEmail = false;
@@ -85,6 +86,14 @@ public class SignUpActivity extends AppCompatActivity {
         etAddress = findViewById(R.id.etAddress);
         btnSignUp = findViewById(R.id.btnSignUp);
 
+        // Force password toggle eye icon in case XML style is overridden
+        if (layoutPassword != null) {
+            layoutPassword.setEndIconMode(TextInputLayout.END_ICON_PASSWORD_TOGGLE);
+        }
+        if (layoutConfirmPassword != null) {
+            layoutConfirmPassword.setEndIconMode(TextInputLayout.END_ICON_PASSWORD_TOGGLE);
+        }
+
         // Set up toolbar back button
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         if (toolbar != null) {
@@ -97,10 +106,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         String[] addressOptions = getResources().getStringArray(R.array.address_options);
         allowedAddresses = new HashSet<>();
-        for (String option : addressOptions) {
-            allowedAddresses.add(option.toLowerCase(Locale.US));
-        }
-
+        // Address validation removed; dropdown kept optional for user convenience
         if (etAddress != null) {
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this,
@@ -168,6 +174,12 @@ public class SignUpActivity extends AppCompatActivity {
             
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Reset availability on every change to avoid using stale "available" state
+                isEmailAvailable = false;
+                layoutEmail.setHelperText(null);
+                layoutEmail.setError(null);
+                updateSignUpButtonState();
+
                 // Cancel previous check
                 if (emailCheckRunnable != null) {
                     handler.removeCallbacks(emailCheckRunnable);
@@ -193,20 +205,6 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 validatePhone();
-            }
-            
-            @Override
-            public void afterTextChanged(Editable s) {}
-        });
-        
-        // Address validation
-        etAddress.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                validateAddress();
             }
             
             @Override
@@ -245,14 +243,14 @@ public class SignUpActivity extends AppCompatActivity {
     
     private void validateFirstName() {
         String name = etFirstName.getText() != null ? etFirstName.getText().toString() : "";
-        String sanitized = ValidationUtil.sanitizeInput(name);
-        
+        String sanitized = sanitizeSimpleName(name);
+
         if (!sanitized.equals(name)) {
             etFirstName.setText(sanitized);
             etFirstName.setSelection(sanitized.length());
         }
-        
-        String error = ValidationUtil.getFullNameErrorMessage(sanitized);
+
+        String error = getSimpleNameErrorMessage(sanitized);
         isValidFirstName = error == null;
         
         if (error != null) {
@@ -267,14 +265,14 @@ public class SignUpActivity extends AppCompatActivity {
     
     private void validateLastName() {
         String name = etLastName.getText() != null ? etLastName.getText().toString() : "";
-        String sanitized = ValidationUtil.sanitizeInput(name);
-        
+        String sanitized = sanitizeSimpleName(name);
+
         if (!sanitized.equals(name)) {
             etLastName.setText(sanitized);
             etLastName.setSelection(sanitized.length());
         }
-        
-        String error = ValidationUtil.getFullNameErrorMessage(sanitized);
+
+        String error = getSimpleNameErrorMessage(sanitized);
         isValidLastName = error == null;
         
         if (error != null) {
@@ -286,16 +284,50 @@ public class SignUpActivity extends AppCompatActivity {
         
         updateSignUpButtonState();
     }
+
+    /**
+     * Simple name rules for first/last name:
+     * - Only letters (A–Z, a–z)
+     * - No spaces or numbers
+     * - Length 2–20
+     * - No more than 3 of the same letter in a row (prevents JOOOHHHN)
+     */
+    private String sanitizeSimpleName(String input) {
+        if (input == null) return "";
+        // Keep only letters
+        String lettersOnly = input.replaceAll("[^A-Za-z]", "");
+        // Collapse repeated same char >3
+        return lettersOnly.replaceAll("(.)\\1{3,}", "$1$1$1");
+    }
+
+    private String getSimpleNameErrorMessage(String name) {
+        if (name == null || name.isEmpty()) {
+            return "Name cannot be empty";
+        }
+        if (name.length() < 2) {
+            return "Name must be at least 2 letters";
+        }
+        if (name.length() > 20) {
+            return "Name must be at most 20 letters";
+        }
+        if (!name.matches("^[A-Za-z]+$")) {
+            return "Name can contain letters only";
+        }
+        if (name.matches("(?i).*(.)\\1{3,}.*")) {
+            return "Name has too many repeated letters";
+        }
+        return null;
+    }
     
     private void validateEmail() {
         String email = etEmail.getText() != null ? etEmail.getText().toString() : "";
-        String sanitized = ValidationUtil.sanitizeEmail(email);
-        
+        String sanitized = ValidationUtil.sanitizeEmail(email).toLowerCase(Locale.US).trim();
+
         if (!sanitized.equals(email)) {
             etEmail.setText(sanitized);
             etEmail.setSelection(sanitized.length());
         }
-        
+
         if (TextUtils.isEmpty(sanitized)) {
             isValidEmail = false;
             isEmailAvailable = false;
@@ -303,18 +335,40 @@ public class SignUpActivity extends AppCompatActivity {
             updateSignUpButtonState();
             return;
         }
-        
-        if (!ValidationUtil.isValidEmail(sanitized)) {
+
+        // Use Android built-in pattern and domain guard similar to reference
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(sanitized).matches()) {
             isValidEmail = false;
             isEmailAvailable = false;
-            layoutEmail.setError("Please enter a valid email address");
+            layoutEmail.setError("Use a valid email address");
             updateSignUpButtonState();
             return;
         }
-        
+
+        String[] allowedDomains = {"gmail.com", "yahoo.com", "outlook.com", "hotmail.com"};
+        String domain = sanitized.contains("@") ? sanitized.substring(sanitized.indexOf('@') + 1) : "";
+        String localPart = sanitized.contains("@") ? sanitized.substring(0, sanitized.indexOf('@')) : "";
+        boolean domainOk = false;
+        for (String d : allowedDomains) {
+            if (d.equalsIgnoreCase(domain)) {
+                domainOk = true;
+                break;
+            }
+        }
+        if (!domainOk || localPart.length() < 3) {
+            isValidEmail = false;
+            isEmailAvailable = false;
+            layoutEmail.setError("Allowed: gmail, yahoo, outlook, hotmail (min 3 chars before @)");
+            updateSignUpButtonState();
+            return;
+        }
+
         isValidEmail = true;
+        // Availability must be re-checked for this sanitized email
+        isEmailAvailable = false;
         layoutEmail.setError(null);
         layoutEmail.setErrorEnabled(false);
+        layoutEmail.setHelperText("Checking email availability...");
         updateSignUpButtonState();
     }
     
@@ -323,13 +377,17 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
         
-        String email = etEmail.getText() != null ? etEmail.getText().toString().trim() : "";
+        String email = etEmail.getText() != null ? etEmail.getText().toString().trim().toLowerCase(Locale.US) : "";
         if (TextUtils.isEmpty(email)) {
             return;
         }
         
         isCheckingEmail = true;
+        isEmailAvailable = false;
+        layoutEmail.setError(null);
+        layoutEmail.setErrorEnabled(false);
         layoutEmail.setHelperText("Checking email availability...");
+        updateSignUpButtonState();
         
         userService.checkEmailExists(email, new UserService.EmailCheckCallback() {
             @Override
@@ -338,13 +396,13 @@ public class SignUpActivity extends AppCompatActivity {
                     isCheckingEmail = false;
                     if (exists) {
                         isEmailAvailable = false;
-                        layoutEmail.setError("This email is already registered");
+                        layoutEmail.setError("Email already exists. Cannot use this email.");
                         layoutEmail.setHelperText(null);
                     } else {
                         isEmailAvailable = true;
                         layoutEmail.setError(null);
                         layoutEmail.setErrorEnabled(false);
-                        layoutEmail.setHelperText("Email is available");
+                        layoutEmail.setHelperText(null); // no "available" helper
                     }
                     updateSignUpButtonState();
                 });
@@ -354,8 +412,8 @@ public class SignUpActivity extends AppCompatActivity {
             public void onError(String error) {
                 mainHandler.post(() -> {
                     isCheckingEmail = false;
-                    // On error, allow registration (Supabase will catch duplicates)
-                    isEmailAvailable = true;
+                    isEmailAvailable = false;
+                    layoutEmail.setError(error != null ? error : "Unable to verify email. Please try again.");
                     layoutEmail.setHelperText(null);
                     updateSignUpButtonState();
                 });
@@ -380,21 +438,6 @@ public class SignUpActivity extends AppCompatActivity {
         } else {
             layoutPhone.setError(null);
             layoutPhone.setErrorEnabled(false);
-        }
-        
-        updateSignUpButtonState();
-    }
-    
-    private void validateAddress() {
-        String address = etAddress.getText() != null ? etAddress.getText().toString().trim() : "";
-        String error = ValidationUtil.getAddressErrorMessage(address);
-        isValidAddress = error == null;
-        
-        if (error != null) {
-            layoutAddress.setError(error);
-        } else {
-            layoutAddress.setError(null);
-            layoutAddress.setErrorEnabled(false);
         }
         
         updateSignUpButtonState();
@@ -447,7 +490,6 @@ public class SignUpActivity extends AppCompatActivity {
                           isValidEmail && 
                           isEmailAvailable && 
                           isValidPhone && 
-                          isValidAddress && 
                           isValidPassword && 
                           isPasswordMatch &&
                           !isCheckingEmail;
@@ -472,12 +514,17 @@ public class SignUpActivity extends AppCompatActivity {
         validateLastName();
         validateEmail();
         validatePhone();
-        validateAddress();
         validatePassword();
         validatePasswordMatch();
         
+        if (!isEmailAvailable) {
+            Toast.makeText(this, "Email is already used!", Toast.LENGTH_LONG).show();
+            layoutEmail.setError("Email already exists. Cannot use this email.");
+            return;
+        }
+
         if (!isValidFirstName || !isValidLastName || !isValidEmail || !isEmailAvailable || !isValidPhone || 
-            !isValidAddress || !isValidPassword || !isPasswordMatch) {
+            !isValidPassword || !isPasswordMatch) {
             Toast.makeText(this, "Please fix all validation errors before submitting", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -488,13 +535,48 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
         final String userType = "customer";
+        if (isSubmitting) return;
+        isSubmitting = true;
         btnSignUp.setEnabled(false);
-        btnSignUp.setText("Creating account...");
+        btnSignUp.setText("Checking email...");
 
+        // Final real-time check against Supabase users before sign-up
+        userService.checkEmailExists(email, new UserService.EmailCheckCallback() {
+            @Override
+            public void onResult(boolean exists) {
+                runOnUiThread(() -> {
+                    if (exists) {
+                        isSubmitting = false;
+                        btnSignUp.setEnabled(true);
+                        btnSignUp.setText("Sign Up");
+                        layoutEmail.setError("Email already exists. Cannot use this email.");
+                        Toast.makeText(SignUpActivity.this, "Email is already used!", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    proceedSignUp(fullName, phone, address, email, password, userType);
+                });
+            }
+
+            @Override
+            public void onError(String error) {
+                runOnUiThread(() -> {
+                    isSubmitting = false;
+                    btnSignUp.setEnabled(true);
+                    btnSignUp.setText("Sign Up");
+                    layoutEmail.setError(error != null ? error : "Unable to verify email. Please try again.");
+                    Toast.makeText(SignUpActivity.this, "Unable to verify email. Please try again.", Toast.LENGTH_LONG).show();
+                });
+            }
+        });
+    }
+
+    private void proceedSignUp(String fullName, String phone, String address, String email, String password, String userType) {
+        btnSignUp.setText("Creating account...");
         authService.signUp(email, password, fullName, phone, address, userType, new AuthService.AuthCallback() {
             @Override
             public void onSuccess(User user, String token) {
                 runOnUiThread(() -> {
+                    isSubmitting = false;
                     preferenceUtil.saveTempSignupData(fullName, phone, address, userType);
                     btnSignUp.setEnabled(true);
                     btnSignUp.setText("Sign Up");
@@ -511,6 +593,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onError(String error) {
                 runOnUiThread(() -> {
+                    isSubmitting = false;
                     btnSignUp.setEnabled(true);
                     btnSignUp.setText("Sign Up");
                     showError(error);

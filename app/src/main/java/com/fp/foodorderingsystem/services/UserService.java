@@ -65,21 +65,28 @@ public class UserService {
                 String sanitizedEmail = email.trim().toLowerCase();
                 // URL encode the email for the query parameter
                 String encodedEmail = java.net.URLEncoder.encode(sanitizedEmail, "UTF-8");
-                String endpoint = "users?email=eq." + encodedEmail + "&select=id";
+                // Case-insensitive exact match using ilike
+                String endpoint = "users?email=ilike." + encodedEmail + "&select=id";
                 
                 Request request = supabaseService.createRequest(endpoint).get().build();
                 Response response = supabaseService.executeRequest(request);
                 
                 if (response.isSuccessful()) {
                     String responseBody = response.body() != null ? response.body().string() : "";
-                    // If response is empty array [], email doesn't exist
-                    // If response has items, email exists
-                    boolean exists = !responseBody.trim().equals("[]") && 
-                                   responseBody.trim().length() > 2;
+
+                    boolean exists = false;
+                    try {
+                        com.google.gson.JsonArray arr = gson.fromJson(responseBody, com.google.gson.JsonArray.class);
+                        exists = arr != null && arr.size() > 0;
+                    } catch (Exception ignore) {
+                        // Fallback to string check
+                        String trimmed = responseBody != null ? responseBody.trim() : "";
+                        exists = !trimmed.equals("[]") && trimmed.length() > 2;
+                    }
+
                     callback.onResult(exists);
                 } else {
-                    // On error, assume email doesn't exist to allow registration
-                    callback.onResult(false);
+                    callback.onError("Unable to verify email right now. Please try again.");
                 }
             } catch (Exception e) {
                 Log.e(TAG, "Error checking email existence", e);

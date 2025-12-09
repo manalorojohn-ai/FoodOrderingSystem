@@ -85,7 +85,42 @@ public class SupabaseService {
     }
     
     public String getPublicUrl(String bucket, String filePath) {
-        return SupabaseConfig.SUPABASE_URL + "/storage/v1/object/public/" + bucket + "/" + filePath;
+        if (filePath == null || filePath.isEmpty()) {
+            return null;
+        }
+        
+        // If it's already a full URL, return as is
+        if (filePath.startsWith("http://") || filePath.startsWith("https://")) {
+            return filePath;
+        }
+        
+        // Remove leading slash if present
+        if (filePath.startsWith("/")) {
+            filePath = filePath.substring(1);
+        }
+        
+        // URL encode the file path to handle special characters
+        try {
+            // Split by slashes, encode each segment, then rejoin
+            String[] pathParts = filePath.split("/");
+            StringBuilder encodedPath = new StringBuilder();
+            for (int i = 0; i < pathParts.length; i++) {
+                if (i > 0) {
+                    encodedPath.append("/");
+                }
+                // URL encode each path segment
+                encodedPath.append(java.net.URLEncoder.encode(pathParts[i], "UTF-8")
+                    .replace("+", "%20")); // Replace + with %20 for spaces
+            }
+            filePath = encodedPath.toString();
+        } catch (Exception e) {
+            // If encoding fails, use original path
+            android.util.Log.w("SupabaseService", "Failed to encode file path: " + filePath, e);
+        }
+        
+        String fullUrl = SupabaseConfig.SUPABASE_URL + "/storage/v1/object/public/" + bucket + "/" + filePath;
+        android.util.Log.d("SupabaseService", "Generated public URL - Bucket: " + bucket + ", Path: " + filePath + ", Full URL: " + fullUrl);
+        return fullUrl;
     }
     
     public String getAccessToken() {

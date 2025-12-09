@@ -8,7 +8,9 @@ public class FoodItem {
     private String name;
     private String description;
     private double price;
+    @SerializedName("image_url")
     private String imageUrl;
+    @SerializedName("image_path")
     private String imagePath;
     private String status; // "available" or "out_of_stock"
     private int stock;

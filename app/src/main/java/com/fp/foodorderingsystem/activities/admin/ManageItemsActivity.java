@@ -271,6 +271,9 @@ public class ManageItemsActivity extends AppCompatActivity implements SwipeRefre
         String priceValue = getTextValue(inputPrice);
         String stockValue = getTextValue(inputStock);
         String imageValue = getTextValue(inputImagePath);
+        String imagePublicUrl = TextUtils.isEmpty(imageValue)
+                ? null
+                : supabaseService.getPublicUrl(ImageUtil.BUCKET_FOOD_ITEMS, imageValue);
         
         boolean hasError = false;
         if (TextUtils.isEmpty(name)) {
@@ -329,7 +332,7 @@ public class ManageItemsActivity extends AppCompatActivity implements SwipeRefre
         item.setStatus(switchAvailability.isChecked() ? "available" : "unavailable");
         item.setStock(stock);
         item.setImagePath(TextUtils.isEmpty(imageValue) ? null : imageValue);
-        item.setImageUrl(null);
+        item.setImageUrl(imagePublicUrl);
         
         showLoading(true);
         if (editingItem == null) {

@@ -80,98 +80,107 @@
             </com.google.android.material.card.MaterialCardView>
 
             <!-- Features Section -->
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/featuresSection"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
                 android:layout_marginTop="32dp"
                 app:layout_constraintTop_toBottomOf="@id/heroCard"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintEnd_toEndOf="parent"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="6dp"
+                app:cardBackgroundColor="@color/card_background">
 
-                <!-- Fast Delivery Feature -->
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
+                    android:orientation="horizontal"
                     android:gravity="center"
-                    android:padding="12dp">
+                    android:padding="8dp">
 
-                    <ImageView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:src="@drawable/ic_time"
-                        android:contentDescription="Fast delivery"
-                        android:tint="@color/green_primary"
-                        android:layout_marginBottom="8dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <!-- Fast Delivery Feature -->
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Fast Delivery"
-                        android:textColor="@color/text_primary"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        android:gravity="center" />
-                </LinearLayout>
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="12dp">
 
-                <!-- Fresh Food Feature -->
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:padding="12dp">
+                        <ImageView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/ic_time"
+                            android:contentDescription="Fast delivery"
+                            android:tint="@color/green_primary"
+                            android:layout_marginBottom="8dp" />
 
-                    <ImageView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:src="@drawable/ic_food_banner"
-                        android:contentDescription="Fresh food"
-                        android:tint="@color/green_primary"
-                        android:layout_marginBottom="8dp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Fast Delivery"
+                            android:textColor="@color/text_primary"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:gravity="center" />
+                    </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <!-- Fresh Food Feature -->
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Fresh Food"
-                        android:textColor="@color/text_primary"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        android:gravity="center" />
-                </LinearLayout>
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="12dp">
 
-                <!-- Easy Ordering Feature -->
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:padding="12dp">
+                        <ImageView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/ic_hamburger"
+                            android:contentDescription="Fresh food"
+                            android:tint="@color/green_primary"
+                            android:layout_marginBottom="8dp" />
 
-                    <ImageView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:src="@drawable/ic_cart"
-                        android:contentDescription="Easy ordering"
-                        android:tint="@color/green_primary"
-                        android:layout_marginBottom="8dp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Fresh Bites"
+                            android:textColor="@color/text_primary"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:gravity="center" />
+                    </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <!-- Easy Ordering Feature -->
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Easy Order"
-                        android:textColor="@color/text_primary"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        android:gravity="center" />
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="12dp">
+
+                        <ImageView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/ic_cart"
+                            android:contentDescription="Easy ordering"
+                            android:tint="@color/green_primary"
+                            android:layout_marginBottom="8dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Easy Order"
+                            android:textColor="@color/text_primary"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:gravity="center" />
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- Action Buttons -->
             <LinearLayout

@@ -1,0 +1,73 @@
+GOOGLE PLAY STORE LISTING CONTENT
+=====================================
+
+APP NAME: Eat&Run
+(Already filled: 7/30 characters)
+
+SHORT DESCRIPTION (Required - Max 80 characters)
+------------------------------------------------
+Order delicious food from your favorite restaurants with fast delivery. Browse menus, track orders in real-time, and enjoy seamless checkout.
+
+(Character count: 80/80)
+
+ALTERNATIVE SHORT DESCRIPTION (if you need shorter):
+Order food from restaurants with fast delivery. Real-time tracking and easy checkout.
+
+(Character count: 66/80)
+
+
+FULL DESCRIPTION (Required - Max 4000 characters)
+--------------------------------------------------
+Eat&Run - Your Complete Food Ordering Solution
+
+Order delicious food from your favorite restaurants with ease! Eat&Run brings you a seamless food ordering experience with real-time tracking, secure payments, and fast delivery.
+
+KEY FEATURES:
+
+🍔 Browse by Category
+Explore a wide variety of food categories and discover new favorites. Filter menu items by category to find exactly what you're craving.
+
+📱 Real-Time Order Tracking
+Track your orders in real-time from the moment you place them until they arrive at your doorstep. Get instant notifications about order status updates.
+
+💳 Secure Checkout
+Multiple payment options including GCash, Maya, and Cash on Delivery. Your payment information is processed securely through trusted payment gateways.
+
+📋 Complete Order History
+View all your past orders, reorder favorites, and track your order history in one convenient place.
+
+👤 Profile Management
+Manage your profile, delivery addresses, and preferences. Update your information anytime with real-time synchronization.
+
+🔔 Push Notifications
+Stay informed with instant notifications about order confirmations, status updates, and special offers.
+
+⚡ Fast & Reliable
+Built for speed and reliability. Enjoy a smooth ordering experience with quick loading times and responsive design.
+
+🎯 User-Friendly Interface
+Intuitive design makes ordering food simple and enjoyable. Browse menus, customize orders, and checkout in just a few taps.
+
+ADMIN FEATURES (For Restaurant Owners):
+- Comprehensive dashboard with analytics
+- Order management system
+- User management tools
+- Real-time order tracking
+- Sales reports and insights
+
+WHY CHOOSE EAT&RUN?
+
+✓ Easy to Use - Simple, intuitive interface
+✓ Fast Delivery - Quick order processing and delivery
+✓ Secure Payments - Multiple secure payment options
+✓ Real-Time Updates - Track your orders live
+✓ Wide Selection - Browse from multiple restaurants
+✓ Customer Support - Dedicated support team
+
+Download Eat&Run today and experience the future of food ordering!
+
+For support or inquiries, contact us at: manalorojohn@gmail.com
+
+(Character count: approximately 1,200/4000 - you have plenty of room to add more details if needed)
+
+

@@ -54,7 +54,8 @@ public class FakeBookingTrackerActivity extends AppCompatActivity {
     private void setupRecyclerView() {
         if (rvFlaggedUsers != null) {
             rvFlaggedUsers.setLayoutManager(new LinearLayoutManager(this));
-            rvFlaggedUsers.setHasFixedSize(true);
+            // Note: setHasFixedSize(true) is not used because RecyclerView is inside NestedScrollView
+            // and uses wrap_content height, which is incompatible with setHasFixedSize
             // TODO: Set adapter when FlaggedUserAdapter is created
         }
     }

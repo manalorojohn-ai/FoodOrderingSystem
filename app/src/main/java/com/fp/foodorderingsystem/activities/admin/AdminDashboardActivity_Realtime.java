@@ -53,8 +53,6 @@ public class AdminDashboardActivity_Realtime extends AppCompatActivity implement
     private TextView tvTotalRevenue;
     private TextView tvPendingOrders;
     private TextView tvCompletedOrders;
-    private TextView tvCancelledOrders;
-    private TextView tvAverageOrderValue;
     private TextView tvCompletionRate;
     private TextView tvSyncTime;
 
@@ -139,8 +137,6 @@ public class AdminDashboardActivity_Realtime extends AppCompatActivity implement
         tvTotalRevenue = findViewById(R.id.tvTotalRevenue);
         tvPendingOrders = findViewById(R.id.tvPendingOrders);
         tvCompletedOrders = findViewById(R.id.tvCompletedOrders);
-        tvCancelledOrders = findViewById(R.id.tvCancelledOrders);
-        tvAverageOrderValue = findViewById(R.id.tvAverageOrderValue);
         tvCompletionRate = findViewById(R.id.tvCompletionRate);
         tvSyncTime = findViewById(R.id.tvSyncTime);
     }
@@ -237,14 +233,6 @@ public class AdminDashboardActivity_Realtime extends AppCompatActivity implement
 
         if (tvCompletedOrders != null) {
             tvCompletedOrders.setText(String.valueOf(metrics.completedOrders));
-        }
-
-        if (tvCancelledOrders != null) {
-            tvCancelledOrders.setText(String.valueOf(metrics.cancelledOrders));
-        }
-
-        if (tvAverageOrderValue != null) {
-            tvAverageOrderValue.setText(currencyFormat.format(metrics.averageOrderValue));
         }
 
         if (tvCompletionRate != null) {

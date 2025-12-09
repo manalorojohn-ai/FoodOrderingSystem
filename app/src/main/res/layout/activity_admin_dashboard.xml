@@ -552,230 +552,6 @@
 
                     </com.google.android.material.card.MaterialCardView>
 
-                    <!-- Additional Stats Row: Cancelled & Average Order Value -->
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/cardCancelledOrders"
-                        android:layout_width="0dp"
-                        android:layout_height="140dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginEnd="8dp"
-                        app:cardCornerRadius="20dp"
-                        app:cardElevation="6dp"
-                        app:cardBackgroundColor="#FFE8E8"
-                        app:layout_constraintTop_toBottomOf="@id/cardPendingOrders"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/cardAverageOrderValue"
-                        app:layout_constraintWidth_percent="0.48">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:padding="16dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal">
-
-                                <ImageView
-                                    android:layout_width="28dp"
-                                    android:layout_height="28dp"
-                                    android:background="@drawable/bg_avatar_circle"
-                                    android:padding="6dp"
-                                    android:src="@drawable/ic_delete"
-                                    android:tint="#FF6B6B"
-                                    android:contentDescription="Cancelled orders icon" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="10dp"
-                                    android:text="Cancelled"
-                                    android:textColor="#1B1B1B"
-                                    android:textSize="13sp"
-                                    android:textStyle="bold" />
-
-                            </LinearLayout>
-
-                            <View
-                                android:layout_width="0dp"
-                                android:layout_height="0dp"
-                                android:layout_weight="1" />
-
-                            <TextView
-                                android:id="@+id/tvCancelledOrders"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="0"
-                                android:textColor="#FF6B6B"
-                                android:textSize="32sp"
-                                android:textStyle="bold"
-                                android:includeFontPadding="false" />
-
-                            <TextView
-                                android:id="@+id/tvCancelledOrdersTrend"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="6dp"
-                                android:text="Low rate"
-                                android:textColor="#C4665F"
-                                android:textSize="11sp" />
-
-                        </LinearLayout>
-
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/cardAverageOrderValue"
-                        android:layout_width="0dp"
-                        android:layout_height="140dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginStart="8dp"
-                        app:cardCornerRadius="20dp"
-                        app:cardElevation="6dp"
-                        app:cardBackgroundColor="#E8F5FF"
-                        app:layout_constraintTop_toBottomOf="@id/cardCompletedOrders"
-                        app:layout_constraintStart_toEndOf="@id/cardCancelledOrders"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintWidth_percent="0.48">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:padding="16dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal">
-
-                                <ImageView
-                                    android:layout_width="28dp"
-                                    android:layout_height="28dp"
-                                    android:background="@drawable/bg_avatar_circle"
-                                    android:padding="6dp"
-                                    android:src="@drawable/ic_wallet"
-                                    android:tint="#4A90E2"
-                                    android:contentDescription="Average value icon" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="10dp"
-                                    android:text="Avg Value"
-                                    android:textColor="#1B1B1B"
-                                    android:textSize="13sp"
-                                    android:textStyle="bold" />
-
-                            </LinearLayout>
-
-                            <View
-                                android:layout_width="0dp"
-                                android:layout_height="0dp"
-                                android:layout_weight="1" />
-
-                            <TextView
-                                android:id="@+id/tvAverageOrderValue"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="₱0"
-                                android:textColor="#4A90E2"
-                                android:textSize="28sp"
-                                android:textStyle="bold"
-                                android:maxLines="1"
-                                android:ellipsize="end"
-                                android:includeFontPadding="false" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="6dp"
-                                android:text="Per order"
-                                android:textColor="#6C757D"
-                                android:textSize="11sp" />
-
-                        </LinearLayout>
-
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <!-- Completion Rate Card -->
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/cardCompletionRate"
-                        android:layout_width="0dp"
-                        android:layout_height="140dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginStart="8dp"
-                        app:cardCornerRadius="20dp"
-                        app:cardElevation="6dp"
-                        app:cardBackgroundColor="#F0E8FF"
-                        app:layout_constraintTop_toBottomOf="@id/cardCancelledOrders"
-                        app:layout_constraintStart_toEndOf="@id/cardAverageOrderValue"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintWidth_percent="0.48">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:padding="16dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal">
-
-                                <ImageView
-                                    android:layout_width="28dp"
-                                    android:layout_height="28dp"
-                                    android:background="@drawable/bg_avatar_circle"
-                                    android:padding="6dp"
-                                    android:src="@drawable/ic_add"
-                                    android:tint="#8B5CF6"
-                                    android:contentDescription="Completion rate icon" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="10dp"
-                                    android:text="Completion"
-                                    android:textColor="#1B1B1B"
-                                    android:textSize="13sp"
-                                    android:textStyle="bold" />
-
-                            </LinearLayout>
-
-                            <View
-                                android:layout_width="0dp"
-                                android:layout_height="0dp"
-                                android:layout_weight="1" />
-
-                            <TextView
-                                android:id="@+id/tvCompletionRate"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="0%"
-                                android:textColor="#8B5CF6"
-                                android:textSize="32sp"
-                                android:textStyle="bold"
-                                android:includeFontPadding="false" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="6dp"
-                                android:text="Success rate"
-                                android:textColor="#6C757D"
-                                android:textSize="11sp" />
-
-                        </LinearLayout>
-
-                    </com.google.android.material.card.MaterialCardView>
-
                     <!-- Last Sync Time -->
                     <TextView
                         android:id="@+id/tvSyncTime"
@@ -786,7 +562,7 @@
                         android:text="Last sync: Just now • Realtime active"
                         android:textColor="#6C757D"
                         android:textSize="12sp"
-                        app:layout_constraintTop_toBottomOf="@id/cardCompletionRate"
+                        app:layout_constraintTop_toBottomOf="@id/cardCompletedOrders"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -921,10 +697,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="vertical"
-                            android:paddingStart="16dp"
-                            android:paddingEnd="16dp"
-                            android:paddingTop="14dp"
-                            android:paddingBottom="14dp">
+                android:padding="16dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -980,10 +753,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="vertical"
-                            android:paddingStart="16dp"
-                            android:paddingEnd="16dp"
-                            android:paddingTop="14dp"
-                            android:paddingBottom="14dp">
+                android:padding="16dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -1039,10 +809,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="vertical"
-                            android:paddingStart="16dp"
-                            android:paddingEnd="16dp"
-                            android:paddingTop="14dp"
-                            android:paddingBottom="14dp">
+                android:padding="16dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -1113,10 +880,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="vertical"
-                            android:paddingStart="20dp"
-                            android:paddingEnd="20dp"
-                            android:paddingTop="16dp"
-                            android:paddingBottom="16dp">
+                android:padding="16dp">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -1164,10 +928,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="vertical"
-                            android:paddingStart="20dp"
-                            android:paddingEnd="20dp"
-                            android:paddingTop="16dp"
-                            android:paddingBottom="16dp">
+                android:padding="16dp">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -1217,10 +978,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="vertical"
-                            android:paddingStart="20dp"
-                            android:paddingEnd="20dp"
-                            android:paddingTop="16dp"
-                            android:paddingBottom="16dp">
+                android:padding="16dp">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -1249,6 +1007,65 @@
                         </LinearLayout>
 
                     </com.google.android.material.card.MaterialCardView>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="16dp"
+                        tools:layout_editor_absoluteX="105dp"
+                        tools:layout_editor_absoluteY="734dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="28dp"
+                                android:layout_height="28dp"
+                                android:background="@drawable/bg_avatar_circle"
+                                android:contentDescription="Completion rate icon"
+                                android:padding="6dp"
+                                android:src="@drawable/ic_add"
+                                android:tint="#8B5CF6" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:text="Completion"
+                                android:textColor="#1B1B1B"
+                                android:textSize="13sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/tvCompletionRate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
+                            android:text="0%"
+                            android:textColor="#8B5CF6"
+                            android:textSize="32sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:text="Success rate"
+                            android:textColor="#6C757D"
+                            android:textSize="11sp" />
+
+                    </LinearLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

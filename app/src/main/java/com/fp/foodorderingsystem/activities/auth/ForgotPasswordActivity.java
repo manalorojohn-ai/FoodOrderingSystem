@@ -26,6 +26,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 return;
             }
             btnSend.setEnabled(false);
+            // Use 6-digit OTP flow for password reset
             authService.sendRecoveryOtp(email, new AuthService.SimpleCallback() {
                 @Override
                 public void onSuccess() {

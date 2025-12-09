@@ -261,7 +261,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
         }
         
         if (imgSidebarAvatar != null) {
-            imgSidebarAvatar.setImageResource(R.drawable.logo);
+            imgSidebarAvatar.setImageResource(R.drawable.ic_food_banner);
         }
     }
     
@@ -512,6 +512,10 @@ public class AdminDashboardActivity extends AppCompatActivity {
         // Management -> Manage Items
         setNavigationAction(R.id.btnNavManagement, () -> navigateToActivity(ManageItemsActivity.class));
         setNavigationAction(R.id.tvNavManagementLabel, () -> navigateToActivity(ManageItemsActivity.class));
+
+        // Categories
+        setNavigationAction(R.id.btnNavCategories, () -> navigateToActivity(ManageCategoriesActivity.class));
+        setNavigationAction(R.id.tvNavCategoriesLabel, () -> navigateToActivity(ManageCategoriesActivity.class));
 
         // Live Orders
         setNavigationAction(R.id.btnNavLiveOrders, () -> navigateToActivity(ManageOrdersActivity.class));

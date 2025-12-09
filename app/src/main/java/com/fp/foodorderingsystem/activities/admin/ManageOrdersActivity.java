@@ -113,20 +113,24 @@ public class ManageOrdersActivity extends AppCompatActivity implements SwipeRefr
     private void setupListeners() {
         swipeRefreshLayout.setOnRefreshListener(this);
         
-        // Search listener
-        inputSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                currentSearchQuery = s != null ? s.toString().trim() : "";
-                applyFilters();
-            }
-            
-            @Override
-            public void afterTextChanged(Editable s) {}
-        });
+        // Search removed from UI; guard in case layout still missing the view
+        if (inputSearch != null) {
+            inputSearch.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    currentSearchQuery = s != null ? s.toString().trim() : "";
+                    applyFilters();
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {}
+            });
+        } else {
+            currentSearchQuery = "";
+        }
         
         // Status filter listener
         chipGroupStatus.setOnCheckedStateChangeListener((group, checkedIds) -> {
@@ -149,22 +153,16 @@ public class ManageOrdersActivity extends AppCompatActivity implements SwipeRefr
         filteredOrders.clear();
         
         for (Order order : allOrders) {
-            // Search filter
+            // Search removed from UI; always match
             boolean matchesSearch = true;
-            if (!TextUtils.isEmpty(currentSearchQuery)) {
-                String query = currentSearchQuery.toLowerCase();
-                matchesSearch = String.valueOf(order.getId()).contains(query) ||
-                               (order.getStatus() != null && order.getStatus().toLowerCase().contains(query)) ||
-                               (order.getPaymentMethod() != null && order.getPaymentMethod().toLowerCase().contains(query));
-            }
-            
+
             // Status filter
             boolean matchesStatus = true;
             if (!"all".equals(currentFilterStatus)) {
-                matchesStatus = order.getStatus() != null && 
+                matchesStatus = order.getStatus() != null &&
                               order.getStatus().toLowerCase().equals(currentFilterStatus);
             }
-            
+
             if (matchesSearch && matchesStatus) {
                 filteredOrders.add(order);
             }

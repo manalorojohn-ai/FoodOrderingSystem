@@ -149,5 +149,15 @@ public class PreferenceUtil {
             .remove(KEY_TEMP_USER_TYPE)
             .apply();
     }
+    
+    /**
+     * Clear all user data and preferences
+     * Used when deleting account
+     */
+    public void clearAll() {
+        prefs.edit()
+            .clear()
+            .apply();
+    }
 }
 

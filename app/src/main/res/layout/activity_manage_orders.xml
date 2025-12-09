@@ -42,7 +42,7 @@
                 android:padding="16dp"
                 android:paddingBottom="24dp">
 
-                <!-- Search and Filter Card -->
+                <!-- Filter Card -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -56,29 +56,6 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:padding="16dp">
-
-                        <!-- Search Bar -->
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/inputSearchLayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="12dp"
-                            android:hint="Search orders..."
-                            app:startIconDrawable="@android:drawable/ic_menu_search"
-                            app:boxCornerRadiusTopStart="12dp"
-                            app:boxCornerRadiusTopEnd="12dp"
-                            app:boxCornerRadiusBottomStart="12dp"
-                            app:boxCornerRadiusBottomEnd="12dp"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/inputSearch"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:inputType="text"
-                                android:maxLines="1" />
-
-                        </com.google.android.material.textfield.TextInputLayout>
 
                         <!-- Status Filter Chips -->
                         <com.google.android.material.chip.ChipGroup
@@ -122,6 +99,13 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Completed"
+                                style="@style/Widget.MaterialComponents.Chip.Choice" />
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chipCancelled"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Cancelled"
                                 style="@style/Widget.MaterialComponents.Chip.Choice" />
 
                         </com.google.android.material.chip.ChipGroup>

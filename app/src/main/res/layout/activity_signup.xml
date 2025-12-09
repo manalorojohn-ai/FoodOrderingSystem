@@ -151,7 +151,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:hint="Password"
-                app:endIconMode="password_toggle">
+                app:endIconMode="password_toggle"
+                app:passwordToggleEnabled="true"
+                app:endIconTint="@color/text_secondary"
+                app:endIconContentDescription="Toggle password visibility">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etPassword"
@@ -167,7 +170,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:hint="Confirm Password"
-                app:endIconMode="password_toggle">
+                app:endIconMode="password_toggle"
+                app:passwordToggleEnabled="true"
+                app:endIconTint="@color/text_secondary"
+                app:endIconContentDescription="Toggle password visibility">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etConfirmPassword"

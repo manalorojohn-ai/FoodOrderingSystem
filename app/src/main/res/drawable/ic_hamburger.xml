@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+
+    <!-- Top bun -->
+    <path
+        android:fillColor="#F6C27A"
+        android:pathData="M8,18 Q24,8 40,18 L40,22 L8,22 Z" />
+
+    <!-- Seeds -->
+    <path
+        android:fillColor="#FFF8E1"
+        android:pathData="M14,17 l2,-1 l1,2 l-2,1 z" />
+    <path
+        android:fillColor="#FFF8E1"
+        android:pathData="M20,15 l2,-1 l1,2 l-2,1 z" />
+    <path
+        android:fillColor="#FFF8E1"
+        android:pathData="M26,15 l2,-1 l1,2 l-2,1 z" />
+    <path
+        android:fillColor="#FFF8E1"
+        android:pathData="M32,17 l2,-1 l1,2 l-2,1 z" />
+
+    <!-- Lettuce -->
+    <path
+        android:fillColor="#7CB342"
+        android:pathData="M8,22 C14,24 18,22 24,24 C30,26 34,22 40,24 L40,26 L8,26 Z" />
+
+    <!-- Patty -->
+    <path
+        android:fillColor="#6D4C41"
+        android:pathData="M8,26 L40,26 L40,29 C40,31 36,32 24,32 C12,32 8,31 8,29 Z" />
+
+    <!-- Cheese -->
+    <path
+        android:fillColor="#FFCA28"
+        android:pathData="M12,24 L36,24 L34,27 L14,27 Z" />
+
+    <!-- Bottom bun -->
+    <path
+        android:fillColor="#E6B36A"
+        android:pathData="M8,32 L40,32 Q40,36 24,38 Q8,36 8,32 Z" />
+</vector>
+
