@@ -33,6 +33,10 @@ android {
         buildConfigField "String", "PAYMONGO_SECRET_KEY", "\"${localProperties.getProperty('PAYMONGO_SECRET_KEY', 'sk_test_placeholder')}\""
     }
 
+    buildFeatures {
+        buildConfig true
+    }
+
     buildTypes {
         release {
             minifyEnabled false
